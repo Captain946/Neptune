@@ -7,6 +7,7 @@ import ManishLokesh.Neptune.Users.Repository.SignupRepo;
 import ManishLokesh.Neptune.Users.RequestBody.LoginRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
+import ManishLokesh.Neptune.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import jakarta.validation.Valid;
@@ -110,9 +111,9 @@ public class SignupController {
 
             login.setLastLogin(LocalDateTime.now().toString());
             loginRepo.save(login);
-            return new ResponseEntity<>(new OtpValidateResponse("success", "Login Successfully",
+            return new ResponseEntity<>(new LoginResponse("success", "Login Successfully",
                     "",login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt()),
+                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin()),
                     HttpStatus.OK);
         }else{
             return new ResponseEntity<>(new SignUpResponse("failure","Incorrect mobile number or Password",
