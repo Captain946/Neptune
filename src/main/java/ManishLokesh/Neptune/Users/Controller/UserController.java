@@ -13,18 +13,15 @@ import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import jakarta.validation.Valid;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
 @RestController
-public class SignupController {
+public class UserController {
 
     @Autowired
     private SignupRepo signupRepo;
