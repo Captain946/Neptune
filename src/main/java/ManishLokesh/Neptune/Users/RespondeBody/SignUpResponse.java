@@ -26,20 +26,6 @@ public class SignUpResponse {
         this.result = result;
     }
 
-    public SignUpResponse(String status, String message,Long id, String fullName, String gender,
-                          String createdAt, String updatedAt, String emailId, String mobileNumber,
-                          String otp){
-        this.status = status;
-        this.message = message;
-        this.id = id;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.emailId = emailId;
-        this.mobileNumber = mobileNumber;
-        this.otp = otp;
-    }
 
     public String getStatus() {
         return status;
