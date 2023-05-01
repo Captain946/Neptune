@@ -8,6 +8,9 @@ public class OtpValidateRequestBody {
     @NotBlank(message = "Not blank")
     @NotNull(message = "not null")
     private String mobileNumber;
+
+    @NotBlank(message = "otp are not blank")
+    @NotNull(message = "otp are not null")
     private String otp;
 
     public String getMobileNumber() {

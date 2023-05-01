@@ -6,6 +6,7 @@ import ManishLokesh.Neptune.Users.Repository.LoginRepo;
 import ManishLokesh.Neptune.Users.Repository.SignupRepo;
 import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
+import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import jakarta.validation.Valid;
 import org.joda.time.LocalDateTime;
@@ -84,7 +85,9 @@ public class SignupController {
                     login.setPassword(signup.getPassword());
                     login.setCreatedAt(LocalDateTime.now().toString());
                     loginRepo.save(login);
-                    return new ResponseEntity<>(new SignUpResponse("success", "Login Successfully", ""),
+                    return new ResponseEntity<>(new OtpValidateResponse("success", "Login Successfully",
+                            "",signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
+                            signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt()),
                             HttpStatus.OK);
                 }else{
                     return new ResponseEntity<>(new SignUpResponse("failure","Account already Validate",
