@@ -107,6 +107,9 @@ public class SignupController {
 
         if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
                 && Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
+
+            login.setLastLogin(LocalDateTime.now().toString());
+            loginRepo.save(login);
             return new ResponseEntity<>(new OtpValidateResponse("success", "Login Successfully",
                     "",login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
                     login.getMobileNumber(),login.getGender(), login.getUpdatedAt()),
