@@ -4,6 +4,7 @@ import ManishLokesh.Neptune.Users.Entity.Login;
 import ManishLokesh.Neptune.Users.Entity.Signup;
 import ManishLokesh.Neptune.Users.Repository.LoginRepo;
 import ManishLokesh.Neptune.Users.Repository.SignupRepo;
+import ManishLokesh.Neptune.Users.RequestBody.LoginRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
@@ -99,10 +100,21 @@ public class SignupController {
 
 
 
-    @GetMapping("/details")
-    public String details(@RequestParam String number){
-        Signup signup = signupRepo.findByMobileNumber(number);
-        return signup.getFullName();
+    @PostMapping("/api/v1/login")
+    public ResponseEntity<?> details(@Valid @RequestBody LoginRequestBody loginRequestBody){
+
+        Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
+
+        if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
+                && Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
+            return new ResponseEntity<>(new OtpValidateResponse("success", "Login Successfully",
+                    "",login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
+                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt()),
+                    HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(new SignUpResponse("failure","Incorrect mobile number or Password",
+                    "Please enter correct mobile number and password"),HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
