@@ -46,6 +46,11 @@ public class SignupController {
             }
         }
         Signup signup = new Signup();
+        signup.setFullName(SignupRequestBody.getFullName());
+        signup.setGender(SignupRequestBody.getGender());
+        signup.setEmailId(SignupRequestBody.getEmailId());
+        signup.setMobileNumber(SignupRequestBody.getMobileNumber());
+        signup.setPassword(SignupRequestBody.getPassword());
         signup.setCreatedAt(LocalDateTime.now().toString());
         signup.setOtp(String.valueOf((int) (Math.random() * 9000) + 1000));
         signupRepo.save(signup);
