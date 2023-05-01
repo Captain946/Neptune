@@ -74,17 +74,22 @@ public class SignupController {
                 return new ResponseEntity<>(new SignUpResponse("failure","Incorrect Otp Value",
                         "Please enter Correct OTP"),HttpStatus.BAD_REQUEST);
             }else{
-
-                Login login = new Login();
-                login.setFullName(signup.getFullName());
-                login.setMobileNumber(signup.getMobileNumber());
-                login.setEmailId(signup.getEmailId());
-                login.setGender(signup.getGender());
-                login.setPassword(signup.getPassword());
-                login.setCreatedAt(LocalDateTime.now().toString());
-                loginRepo.save(login);
-                return new ResponseEntity<>(new SignUpResponse("success", "Login Successfully", ""),
-                        HttpStatus.OK);
+                Login mobile = loginRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber());
+                if(mobile == null){
+                    Login login = new Login();
+                    login.setFullName(signup.getFullName());
+                    login.setMobileNumber(signup.getMobileNumber());
+                    login.setEmailId(signup.getEmailId());
+                    login.setGender(signup.getGender());
+                    login.setPassword(signup.getPassword());
+                    login.setCreatedAt(LocalDateTime.now().toString());
+                    loginRepo.save(login);
+                    return new ResponseEntity<>(new SignUpResponse("success", "Login Successfully", ""),
+                            HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>(new SignUpResponse("failure","Account already Validate",
+                            "Please Login with your password"),HttpStatus.BAD_REQUEST);
+                }
             }
         }
     }
