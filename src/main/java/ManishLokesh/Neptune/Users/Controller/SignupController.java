@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -56,26 +57,31 @@ public class SignupController {
 
     @PostMapping("/api/v1/otp-validate")
     public ResponseEntity<?>otpVerify(@Valid @RequestBody OtpValidateRequestBody otpValidateRequestBody){
-        if(signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber()) == null){
-            return new ResponseEntity<>(new SignUpResponse("failure","mobile number incorrect",
-                    ""),HttpStatus.BAD_REQUEST);
-        }else if(signupRepo.findByOtp(otpValidateRequestBody.getOtp()) == null){
-            return new ResponseEntity<>(new SignUpResponse("failure","Incorrect Otp","")
-                    ,HttpStatus.BAD_REQUEST);
-        }
 
-        Login login = new Login();
-        login.setMobileNumber(otpValidateRequestBody.getMobileNumber());
-        login.setCreatedAt(LocalDateTime.now().toString());
-        login.setUpdatedAt(LocalDateTime.now().toString());
-        login.setLastLogin(LocalDateTime.now().toString());
-        //login.setEmailId(signup.getEmailId());
-        //login.setGender(signup.getGender());
-        //login.setFullName(signup.getFullName());
-        //login.setPassword(signup.getPassword());
-        loginRepo.save(login);
-        return new ResponseEntity<>(new SignUpResponse("success", "Login Successfully", ""),
-                HttpStatus.OK);
+        if(signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber()) == null){
+            return new ResponseEntity<>(new SignUpResponse("failure","mobile number is not valid",
+                    "Please create an account"),HttpStatus.BAD_REQUEST);
+        }else{
+
+            Signup signup = signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber());
+            if(!Objects.equals(signup.getOtp(), otpValidateRequestBody.getOtp())){
+
+                return new ResponseEntity<>(new SignUpResponse("failure","Incorrect Otp Value",
+                        "Please enter Correct OTP"),HttpStatus.BAD_REQUEST);
+            }else{
+
+                Login login = new Login();
+                login.setFullName(signup.getFullName());
+                login.setMobileNumber(signup.getMobileNumber());
+                login.setEmailId(signup.getEmailId());
+                login.setGender(signup.getGender());
+                login.setPassword(signup.getPassword());
+                login.setCreatedAt(LocalDateTime.now().toString());
+                loginRepo.save(login);
+                return new ResponseEntity<>(new SignUpResponse("success", "Login Successfully", ""),
+                        HttpStatus.OK);
+            }
+        }
     }
 
 
