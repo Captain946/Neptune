@@ -1,7 +1,7 @@
-package ManishLokesh.Neptune.Services;
+package ManishLokesh.Neptune.Courses.Services;
 
-import ManishLokesh.Neptune.Doa.CourseDoa;
-import ManishLokesh.Neptune.Entity.Course;
+import ManishLokesh.Neptune.Courses.Doa.CourseDoa;
+import ManishLokesh.Neptune.Courses.Entity.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

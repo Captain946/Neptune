@@ -1,4 +1,4 @@
-package ManishLokesh.Neptune.Entity;
+package ManishLokesh.Neptune.Courses.Entity;
 
 
 import jakarta.persistence.Entity;

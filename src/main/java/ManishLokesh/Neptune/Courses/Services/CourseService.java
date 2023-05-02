@@ -1,6 +1,6 @@
-package ManishLokesh.Neptune.Services;
+package ManishLokesh.Neptune.Courses.Services;
 
-import ManishLokesh.Neptune.Entity.Course;
+import ManishLokesh.Neptune.Courses.Entity.Course;
 
 import java.util.List;
 

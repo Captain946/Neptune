@@ -1,9 +1,8 @@
-package ManishLokesh.Neptune.Controller;
+package ManishLokesh.Neptune.Courses.Controller;
 
 
-import ManishLokesh.Neptune.Doa.CourseDoa;
-import ManishLokesh.Neptune.Entity.Course;
-import ManishLokesh.Neptune.Services.CourseService;
+import ManishLokesh.Neptune.Courses.Entity.Course;
+import ManishLokesh.Neptune.Courses.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

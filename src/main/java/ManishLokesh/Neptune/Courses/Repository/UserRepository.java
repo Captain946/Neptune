@@ -1,6 +1,6 @@
-package ManishLokesh.Neptune.Repository;
+package ManishLokesh.Neptune.Courses.Repository;
 
-import ManishLokesh.Neptune.Entity.User;
+import ManishLokesh.Neptune.Courses.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

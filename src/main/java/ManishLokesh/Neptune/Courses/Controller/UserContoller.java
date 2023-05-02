@@ -1,7 +1,7 @@
-package ManishLokesh.Neptune.Controller;
+package ManishLokesh.Neptune.Courses.Controller;
 
-import ManishLokesh.Neptune.Entity.User;
-import ManishLokesh.Neptune.Repository.UserRepository;
+import ManishLokesh.Neptune.Courses.Entity.User;
+import ManishLokesh.Neptune.Courses.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
