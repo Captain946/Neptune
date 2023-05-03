@@ -1,5 +1,6 @@
 package ManishLokesh.Neptune.Users.Controller;
 
+import ManishLokesh.Neptune.EmailTrigger.SendSignupOTP;
 import ManishLokesh.Neptune.Users.Entity.Login;
 import ManishLokesh.Neptune.Users.Entity.Signup;
 import ManishLokesh.Neptune.Users.Repository.LoginRepo;
@@ -9,6 +10,7 @@ import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
+import ManishLokesh.Neptune.Users.RespondeBody.ResponseDTO;
 import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import jakarta.validation.Valid;
 import org.joda.time.LocalDateTime;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -27,6 +30,8 @@ public class UserController {
     private SignupRepo signupRepo;
     @Autowired
     private LoginRepo loginRepo;
+
+    private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
 
 
 
@@ -52,8 +57,10 @@ public class UserController {
         signup.setMobileNumber(SignupRequestBody.getMobileNumber());
         signup.setPassword(SignupRequestBody.getPassword());
         signup.setCreatedAt(LocalDateTime.now().toString());
-        signup.setOtp(String.valueOf((int) (Math.random() * 9000) + 1000));
+        String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
+        signup.setOtp(otp);
         signupRepo.save(signup);
+        sendSignupOTP.sendOTP(signup.getEmailId(), otp);
         return new ResponseEntity<>(new SignUpResponse("success","user are created successfully",
                 "OTP sent to the registered mobile number"), HttpStatus.CREATED);
     }
@@ -108,9 +115,14 @@ public class UserController {
 
             login.setLastLogin(LocalDateTime.now().toString());
             loginRepo.save(login);
-            return new ResponseEntity<>(new LoginResponse("success", "Login Successfully",
-                    "",login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin()),
+            final LoginResponse loginr = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
+                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin());
+            final ResponseDTO  response = new ResponseDTO();
+            response.status = "Success";
+            response.message = "Login Successfully";
+            response.result = loginr;
+
+            return new ResponseEntity<>(response,
                     HttpStatus.OK);
         }else{
             return new ResponseEntity<>(new SignUpResponse("failure","Incorrect mobile number or Password",

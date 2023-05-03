@@ -1,9 +1,6 @@
 package ManishLokesh.Neptune.Users.RespondeBody;
 
 public class LoginResponse {
-    private String status;
-    private String message;
-    private String result;
     private Long id;
     private String createdAt;
     private String fullName;
@@ -14,12 +11,9 @@ public class LoginResponse {
     private String lastLogin;
 
 
-    public LoginResponse(String status, String message, String result, Long id, String createdAt,
+    public LoginResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
                                String updatedAt,String lastLogin){
-        this.status = status;
-        this.message = message;
-        this.result = result;
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -28,30 +22,6 @@ public class LoginResponse {
         this.gender = gender;
         this.updatedAt = updatedAt;
         this.lastLogin = lastLogin;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
     }
 
     public Long getId() {
@@ -118,3 +88,4 @@ public class LoginResponse {
         this.lastLogin = lastLogin;
     }
 }
+
