@@ -44,8 +44,10 @@ public class UserController {
                         "exist with this mobile Number","Please login with same mobile number"), HttpStatus.BAD_REQUEST);
             }else{
                 exist.setUpdatedAt(LocalDateTime.now().toString());
-                exist.setOtp(String.valueOf((int) (Math.random() * 9000) + 1000));
+                String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
+                exist.setOtp(otp);
                 signupRepo.save(exist);
+                sendSignupOTP.sendOTP(SignupRequestBody.getEmailId(), otp);
                 return new ResponseEntity<>(new SignUpResponse("success","user are created successfully",
                         "OTP sent to the registered mobile number"), HttpStatus.CREATED);
             }

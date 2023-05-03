@@ -9,12 +9,13 @@ public class SendSignupOTP {
 
     public void sendOTP(String receiver, String otp ){
         String host = "smtp.gmail.com";
-        String sender  = "loharmanish9571@gmail.com";
+        String sender  = "manishneptune201@gmail.com";
         String subject = "Login OTP";
 
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host",host);
         properties.setProperty("mail.smtp.auth","true");
+        properties.setProperty("mail.smtp.ssl.enable","true");
         properties.setProperty("mail.smtp.port","465");
         properties.setProperty("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
 
@@ -22,7 +23,7 @@ public class SendSignupOTP {
         Session session = Session.getDefaultInstance(properties,
                 new javax.mail.Authenticator(){
                     protected PasswordAuthentication getPasswordAuthentication(){
-                        return new PasswordAuthentication(sender,"Manish123@");
+                        return new PasswordAuthentication(sender,"vweuedgbstlxgcvk");
                     }
         });
 
