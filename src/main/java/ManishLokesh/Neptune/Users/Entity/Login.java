@@ -9,7 +9,7 @@ public class Login {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_entity_seq")
-    @SequenceGenerator(name = "my_entity_seq", sequenceName = "MY_ENTITY_SEQ", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "my_entity_seq", sequenceName = "MY_ENTITY_SEQ", initialValue = 1)
     private Long id;
     private String createdAt;
     private String updatedAt;
