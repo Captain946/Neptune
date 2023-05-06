@@ -3,9 +3,6 @@ package ManishLokesh.Neptune.Users.RespondeBody;
 import ManishLokesh.Neptune.Users.Repository.LoginRepo;
 
 public class OtpValidateResponse {
-    private String status;
-    private String message;
-    private String result;
     private Long id;
     private String createdAt;
     private String fullName;
@@ -14,12 +11,9 @@ public class OtpValidateResponse {
     private String gender;
     private String updatedAt;
 
-    public OtpValidateResponse(String status, String message, String result, Long id, String createdAt,
+    public OtpValidateResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
                                String updatedAt){
-        this.status = status;
-        this.message = message;
-        this.result = result;
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -30,29 +24,6 @@ public class OtpValidateResponse {
     }
 
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
 
     public Long getId() {
         return id;

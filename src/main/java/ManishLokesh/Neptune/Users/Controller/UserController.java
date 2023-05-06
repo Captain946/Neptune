@@ -42,46 +42,15 @@ public class UserController {
 
 
     @PostMapping("/api/v1/signup")
-    public ResponseEntity<ResponseDTO> UserSignup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
+    public ResponseEntity<ResponseDTO> newUserSignup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
         return this.service.signup(SignupRequestBody);
     }
 
 
 
     @PostMapping("/api/v1/otp-validate")
-    public ResponseEntity<?>otpVerify(@Valid @RequestBody OtpValidateRequestBody otpValidateRequestBody){
-
-        if(signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber()) == null){
-            return new ResponseEntity<>(new SignUpResponse("failure","mobile number is not valid",
-                    "Please create an account"),HttpStatus.BAD_REQUEST);
-        }else{
-
-            Signup signup = signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber());
-            if(!Objects.equals(signup.getOtp(), otpValidateRequestBody.getOtp())){
-
-                return new ResponseEntity<>(new SignUpResponse("failure","Incorrect Otp Value",
-                        "Please enter Correct OTP"),HttpStatus.BAD_REQUEST);
-            }else{
-                Login mobile = loginRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber());
-                if(mobile == null){
-                    Login login = new Login();
-                    login.setFullName(signup.getFullName());
-                    login.setMobileNumber(signup.getMobileNumber());
-                    login.setEmailId(signup.getEmailId());
-                    login.setGender(signup.getGender());
-                    login.setPassword(signup.getPassword());
-                    login.setCreatedAt(LocalDateTime.now().toString());
-                    loginRepo.save(login);
-                    return new ResponseEntity<>(new OtpValidateResponse("success", "Login Successfully",
-                            "",signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
-                            signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt()),
-                            HttpStatus.OK);
-                }else{
-                    return new ResponseEntity<>(new SignUpResponse("failure","Account already Validate",
-                            "Please Login with your password"),HttpStatus.BAD_REQUEST);
-                }
-            }
-        }
+    public ResponseEntity<ResponseDTO>otpVerify(@Valid @RequestBody OtpValidateRequestBody otpValidateRequestBody){
+        return this.service.otpValidate(otpValidateRequestBody);
     }
 
 
@@ -100,7 +69,7 @@ public class UserController {
                     login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin());
             final ResponseDTO  response = new ResponseDTO();
             response.status = "Success";
-            response.message = "Login Successfully";
+            response.error = null;
             response.result = loginr;
 
             return new ResponseEntity<>(response,

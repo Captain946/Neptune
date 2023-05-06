@@ -2,12 +2,12 @@ package ManishLokesh.Neptune.ResponseDTO;
 
 public class ResponseDTO<T> {
     public String status;
-    public String message;
+    public String error;
     public Object result;
 
-    public ResponseDTO(String status, String message, Object result) {
+    public ResponseDTO(String status, String error, Object result) {
         this.status = status;
-        this.message = message;
+        this.error = error;
         this.result = result;
     }
 
