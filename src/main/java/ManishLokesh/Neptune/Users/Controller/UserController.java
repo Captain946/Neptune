@@ -12,6 +12,7 @@ import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
+import ManishLokesh.Neptune.Users.Service.SignupService;
 import jakarta.validation.Valid;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,41 +34,16 @@ public class UserController {
     @Autowired
     private LoginRepo loginRepo;
 
+    @Autowired
+    private SignupService service;
+
     private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
 
 
 
     @PostMapping("/api/v1/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
-        Signup exist = signupRepo.findByMobileNumber(SignupRequestBody.getMobileNumber());
-        if(exist != null){
-            if(loginRepo.findByMobileNumber(SignupRequestBody.getMobileNumber()) != null){
-                return new ResponseEntity<>(new SignUpResponse("failure","User already " +
-                        "exist with this mobile Number","Please login with same mobile number"), HttpStatus.BAD_REQUEST);
-            }else{
-                exist.setUpdatedAt(LocalDateTime.now().toString());
-                String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
-                exist.setOtp(otp);
-                signupRepo.save(exist);
-                runAsync(() -> sendSignupOTP.sendOTP(SignupRequestBody.getEmailId(), otp));
-                return new ResponseEntity<>(new SignUpResponse("success","user are created successfully",
-                        "OTP sent to the registered mobile number"), HttpStatus.CREATED);
-            }
-        }
-        Signup signup = new Signup();
-        signup.setFullName(SignupRequestBody.getFullName());
-        signup.setGender(SignupRequestBody.getGender());
-        signup.setEmailId(SignupRequestBody.getEmailId());
-        signup.setMobileNumber(SignupRequestBody.getMobileNumber());
-        signup.setPassword(SignupRequestBody.getPassword());
-        signup.setCreatedAt(LocalDateTime.now().toString());
-        String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
-        signup.setOtp(otp);
-        signupRepo.save(signup);
-        // sendSignupOTP.sendOTP(signup.getEmailId(), otp);
-        runAsync(() -> sendSignupOTP.sendOTP(signup.getEmailId(), otp));
-        return new ResponseEntity<>(new SignUpResponse("success","user are created successfully",
-                "OTP sent to the registered mobile number"), HttpStatus.CREATED);
+    public ResponseEntity<ResponseDTO> UserSignup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
+        return this.service.signup(SignupRequestBody);
     }
 
 
