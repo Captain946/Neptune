@@ -43,6 +43,8 @@ public class UserController {
 
     @PostMapping("/api/v1/signup")
     public ResponseEntity<ResponseDTO> newUserSignup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
+
+
         return this.service.signup(SignupRequestBody);
     }
 

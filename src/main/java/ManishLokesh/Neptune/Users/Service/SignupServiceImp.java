@@ -11,14 +11,13 @@ import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
-import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
@@ -31,7 +30,9 @@ public class SignupServiceImp implements SignupService{
 
     @Autowired
     public LoginRepo loginRepo;
+
     private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public ResponseEntity<ResponseDTO> signup(SignupRequestBody requestBody) {
@@ -46,6 +47,9 @@ public class SignupServiceImp implements SignupService{
                 exist.setUpdatedAt(LocalDateTime.now().toString());
                 String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
                 exist.setOtp(otp);
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+                String password = bCryptPasswordEncoder.encode(requestBody.getPassword());
+                exist.setPassword(password);
                 signupRepo.save(exist);
                 runAsync(() -> sendSignupOTP.sendOTP(requestBody.getEmailId(), otp));
                 return new ResponseEntity<>(new ResponseDTO<>("success",null,
@@ -57,10 +61,12 @@ public class SignupServiceImp implements SignupService{
         signup.setGender(requestBody.getGender());
         signup.setEmailId(requestBody.getEmailId());
         signup.setMobileNumber(requestBody.getMobileNumber());
-        signup.setPassword(requestBody.getPassword());
+        //signup.setPassword(requestBody.getPassword());
         signup.setCreatedAt(LocalDateTime.now().toString());
         String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
         signup.setOtp(otp);
+        String password = bCryptPasswordEncoder.encode(requestBody.getPassword());
+        signup.setPassword(password);
         signupRepo.save(signup);
         runAsync(() -> sendSignupOTP.sendOTP(signup.getEmailId(), otp));
         return new ResponseEntity<>(new ResponseDTO<>("success",null,
@@ -106,25 +112,29 @@ public class SignupServiceImp implements SignupService{
 
 @Override
 public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
-        Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
-        if(login!= null){
-            if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
-                    && Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
-
+    Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
+    if (login != null) {
+        //if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
+        //&& Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
+        if (Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())) {
+            if (bCryptPasswordEncoder.matches(loginRequestBody.getPassword(), login.getPassword())) {
                 login.setLastLogin(org.joda.time.LocalDateTime.now().toString());
                 loginRepo.save(login);
                 final LoginResponse res = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                        login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin());
+                        login.getMobileNumber(), login.getGender(), login.getUpdatedAt(), login.getLastLogin());
 
-                return new ResponseEntity<>(new ResponseDTO("Success",null,res),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>(new ResponseDTO("failure","Incorrect mobile number or Password",
-                        null),HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseDTO("Success", null, res), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseDTO("failure", "Incorrect mobile number or Password",
+                        null), HttpStatus.BAD_REQUEST);
             }
-        }else{
-            return new ResponseEntity<>(new ResponseDTO("failure","Incorrect mobile number or Password",
-                    null),HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new ResponseDTO("failure", "Incorrect mobile number or Password",
+                    null), HttpStatus.BAD_REQUEST);
         }
+    }else{
+    return new ResponseEntity<>(new ResponseDTO("failure", "Incorrect mobile number",
+            null), HttpStatus.BAD_REQUEST);
+}
     }
-
 }
