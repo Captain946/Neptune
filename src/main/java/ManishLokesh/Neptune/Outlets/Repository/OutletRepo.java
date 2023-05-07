@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OutletRepo extends JpaRepository<Outlet, Long> {
-    boolean existsById(Long id);
 
-    
 }

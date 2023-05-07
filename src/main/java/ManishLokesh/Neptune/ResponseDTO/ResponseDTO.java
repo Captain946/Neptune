@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.ResponseDTO;
 
-public class ResponseDTO<T> {
+public class ResponseDTO<T>{
     public String status;
     public String error;
     public Object result;

@@ -3,6 +3,7 @@ package ManishLokesh.Neptune.Outlets.Controller;
 import ManishLokesh.Neptune.Outlets.ReponseBody.CreateOutletResponse;
 import ManishLokesh.Neptune.Outlets.Repository.OutletRepo;
 import ManishLokesh.Neptune.Outlets.RequestBody.CreateOutlet;
+import ManishLokesh.Neptune.Outlets.Service.OutletService;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,18 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OutletController {
 
-    @Autowired
-    private OutletRepo outletRepo;
     private ResponseDTO responseDTO;
 
+    @Autowired
+    public OutletService service;
 
 
     @PostMapping("api/v1/outlet")
-    public ResponseEntity<?>addOutlet(@RequestBody CreateOutlet createOutlet){
-        //CreateOutletResponse res = new CreateOutletResponse();
-        //responseDTO.status = "success";
-        //responseDTO.message = "outlet created successfully";
-        //responseDTO.result = res;
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    public ResponseEntity<ResponseDTO> addNewOutlet(@RequestBody CreateOutlet createOutlet){
+        return this.service.CreateNewOutlet(createOutlet);
     }
 }

@@ -1,7 +1,5 @@
 package ManishLokesh.Neptune.Users.RespondeBody;
 
-import ManishLokesh.Neptune.Users.Repository.LoginRepo;
-
 public class OtpValidateResponse {
     private Long id;
     private String createdAt;

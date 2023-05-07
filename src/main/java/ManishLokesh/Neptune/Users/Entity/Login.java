@@ -8,8 +8,7 @@ import org.joda.time.DateTime;
 public class Login {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_entity_seq")
-    @SequenceGenerator(name = "my_entity_seq", sequenceName = "MY_ENTITY_SEQ", initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String createdAt;
     private String updatedAt;

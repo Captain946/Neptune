@@ -5,12 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class LoginRequestBody {
 
-    @NotNull(message = "mobile number not null")
-    @NotBlank(message = "mobile number not blank")
     private String mobileNumber;
-
-    @NotNull(message = "password not null")
-    @NotBlank(message = "password not blank")
     private String password;
 
     public String getMobileNumber() {

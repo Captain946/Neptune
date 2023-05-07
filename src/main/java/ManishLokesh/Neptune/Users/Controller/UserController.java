@@ -46,38 +46,14 @@ public class UserController {
         return this.service.signup(SignupRequestBody);
     }
 
-
-
     @PostMapping("/api/v1/otp-validate")
     public ResponseEntity<ResponseDTO>otpVerify(@Valid @RequestBody OtpValidateRequestBody otpValidateRequestBody){
         return this.service.otpValidate(otpValidateRequestBody);
     }
 
-
-
     @PostMapping("/api/v1/login")
-    public ResponseEntity<?> details(@Valid @RequestBody LoginRequestBody loginRequestBody){
-
-        Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
-
-        if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
-                && Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
-
-            login.setLastLogin(LocalDateTime.now().toString());
-            loginRepo.save(login);
-            final LoginResponse loginr = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                    login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin());
-            final ResponseDTO  response = new ResponseDTO();
-            response.status = "Success";
-            response.error = null;
-            response.result = loginr;
-
-            return new ResponseEntity<>(response,
-                    HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(new SignUpResponse("failure","Incorrect mobile number or Password",
-                    "Please enter correct mobile number and password"),HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> details(@Valid @RequestBody LoginRequestBody loginRequestBody) {
+        return this.service.login(loginRequestBody);
     }
 
 }

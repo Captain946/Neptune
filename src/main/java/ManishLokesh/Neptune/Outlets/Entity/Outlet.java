@@ -3,13 +3,13 @@ package ManishLokesh.Neptune.Outlets.Entity;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "outlets")
 public class Outlet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_entity_seq")
-    @SequenceGenerator(name = "my_entity_seq", sequenceName = "MY_ENTITY_SEQ", initialValue = 1234)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String createdAt;
     private String updatedAt;
@@ -36,7 +36,7 @@ public class Outlet {
     private String mobileNo;
     private String stationCode;
     private Integer ratingCount;
-    private Integer ratingValue;
+    private Double ratingValue;
 
     public Long getId() {
         return id;
@@ -246,11 +246,11 @@ public class Outlet {
         this.ratingCount = ratingCount;
     }
 
-    public Integer getRatingValue() {
+    public Double getRatingValue() {
         return ratingValue;
     }
 
-    public void setRatingValue(Integer ratingValue) {
+    public void setRatingValue(Double ratingValue) {
         this.ratingValue = ratingValue;
     }
 }

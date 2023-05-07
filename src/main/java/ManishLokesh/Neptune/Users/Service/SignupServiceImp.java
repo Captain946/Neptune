@@ -6,15 +6,19 @@ import ManishLokesh.Neptune.Users.Entity.Login;
 import ManishLokesh.Neptune.Users.Entity.Signup;
 import ManishLokesh.Neptune.Users.Repository.LoginRepo;
 import ManishLokesh.Neptune.Users.Repository.SignupRepo;
+import ManishLokesh.Neptune.Users.RequestBody.LoginRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.Users.RequestBody.SignupRequestBody;
+import ManishLokesh.Neptune.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.Users.RespondeBody.OtpValidateResponse;
+import ManishLokesh.Neptune.Users.RespondeBody.SignUpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static java.util.concurrent.CompletableFuture.runAsync;
@@ -87,18 +91,40 @@ public class SignupServiceImp implements SignupService{
                     login.setGender(signup.getGender());
                     login.setPassword(signup.getPassword());
                     login.setCreatedAt(LocalDateTime.now().toString());
-                    loginRepo.save(login);
+            loginRepo.save(login);
 
-                    OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
-                            signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt());
-                    return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
-                }else{
-                    return new ResponseEntity<>(new ResponseDTO("failure","Account already Created",
-                            null),HttpStatus.BAD_REQUEST);
-                }
-            }
+            OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
+                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt());
+            return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(new ResponseDTO("failure","Account already Created",
+                    null),HttpStatus.BAD_REQUEST);
         }
     }
+}
+    }
 
+@Override
+public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
+        Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
+        if(login!= null){
+            if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
+                    && Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
+
+                login.setLastLogin(org.joda.time.LocalDateTime.now().toString());
+                loginRepo.save(login);
+                final LoginResponse res = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
+                        login.getMobileNumber(),login.getGender(), login.getUpdatedAt(),login.getLastLogin());
+
+                return new ResponseEntity<>(new ResponseDTO("Success",null,res),HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(new ResponseDTO("failure","Incorrect mobile number or Password",
+                        null),HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(new ResponseDTO("failure","Incorrect mobile number or Password",
+                    null),HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
