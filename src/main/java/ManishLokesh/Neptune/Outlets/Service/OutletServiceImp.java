@@ -1,5 +1,6 @@
 package ManishLokesh.Neptune.Outlets.Service;
 
+import ManishLokesh.Neptune.AuthController.JwtUtil;
 import ManishLokesh.Neptune.Outlets.Entity.Outlet;
 import ManishLokesh.Neptune.Outlets.Repository.OutletRepo;
 import ManishLokesh.Neptune.Outlets.RequestBody.CreateOutlet;
@@ -16,6 +17,10 @@ public class OutletServiceImp implements OutletService{
 
     @Autowired
     public OutletRepo outletRepo;
+
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewOutlet(CreateOutlet createOutlet) {

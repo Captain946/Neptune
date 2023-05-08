@@ -9,9 +9,11 @@ public class OtpValidateResponse {
     private String gender;
     private String updatedAt;
 
+    private String token;
+
     public OtpValidateResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
-                               String updatedAt){
+                               String updatedAt,String token){
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -19,6 +21,7 @@ public class OtpValidateResponse {
         this.mobileNumber = mobileNumber;
         this.gender = gender;
         this.updatedAt = updatedAt;
+        this.token = token;
     }
 
 
@@ -77,5 +80,13 @@ public class OtpValidateResponse {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

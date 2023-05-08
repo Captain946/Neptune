@@ -101,11 +101,13 @@ public class SignupServiceImp implements SignupService{
                     login.setGender(signup.getGender());
                     login.setPassword(signup.getPassword());
                     login.setCreatedAt(LocalDateTime.now().toString());
-            loginRepo.save(login);
+                    loginRepo.save(login);
+                    String token = jwtUtil.generateToken(signup.getFullName());
+                    OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
+                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt(),token);
 
-            OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
-                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt());
             return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
+
         }else{
             return new ResponseEntity<>(new ResponseDTO("failure","Account already Created",
                     null),HttpStatus.BAD_REQUEST);

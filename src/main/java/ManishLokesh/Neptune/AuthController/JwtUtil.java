@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "manish";
+    private static final String SECRET_KEY = "LOHARMANISH201";
     private static final long EXPIRATION_TIME = 86400000;
 
     public String generateToken(String userName){
