@@ -34,7 +34,7 @@ public class OutletController {
         if (jwtUtil.validateToken(token)) {
             return this.service.CreateNewOutlet(createOutlet);
         }
-        return new ResponseEntity<>(new ResponseDTO("failture", "Unautorize", null), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ResponseDTO("failure", "Not authorize to Access", null), HttpStatus.UNAUTHORIZED);
 
     }
 }
