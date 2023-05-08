@@ -1,5 +1,6 @@
 package ManishLokesh.Neptune.Users.Service;
 
+import ManishLokesh.Neptune.AuthController.JwtUtil;
 import ManishLokesh.Neptune.EmailTrigger.SendSignupOTP;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import ManishLokesh.Neptune.Users.Entity.Login;
@@ -30,6 +31,9 @@ public class SignupServiceImp implements SignupService{
 
     @Autowired
     public LoginRepo loginRepo;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -120,8 +124,9 @@ public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
             if (bCryptPasswordEncoder.matches(loginRequestBody.getPassword(), login.getPassword())) {
                 login.setLastLogin(org.joda.time.LocalDateTime.now().toString());
                 loginRepo.save(login);
+                String token = jwtUtil.generateToken(login.getFullName());
                 final LoginResponse res = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                        login.getMobileNumber(), login.getGender(), login.getUpdatedAt(), login.getLastLogin());
+                        login.getMobileNumber(), login.getGender(), login.getUpdatedAt(), login.getLastLogin(),token);
 
                 return new ResponseEntity<>(new ResponseDTO("Success", null, res), HttpStatus.OK);
             } else {

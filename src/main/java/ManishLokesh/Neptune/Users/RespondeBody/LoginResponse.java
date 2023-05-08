@@ -9,11 +9,12 @@ public class LoginResponse {
     private String gender;
     private String updatedAt;
     private String lastLogin;
+    private String jwt;
 
 
     public LoginResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
-                               String updatedAt,String lastLogin){
+                               String updatedAt,String lastLogin,String jwt){
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -22,6 +23,8 @@ public class LoginResponse {
         this.gender = gender;
         this.updatedAt = updatedAt;
         this.lastLogin = lastLogin;
+        this.jwt = jwt;
+
     }
 
     public Long getId() {
@@ -86,6 +89,14 @@ public class LoginResponse {
 
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }
 
