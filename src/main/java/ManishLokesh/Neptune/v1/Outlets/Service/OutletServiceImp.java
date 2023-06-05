@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service 
 public class OutletServiceImp implements OutletService{
@@ -59,6 +60,7 @@ public class OutletServiceImp implements OutletService{
         outlet.setEmailId(createOutlet.getEmailId());
         outlet.setMobileNo(createOutlet.getMobileNo());
         outlet.setRatingValue(3.3);
+        outlet.setCreatedAt(LocalDateTime.now().toString());
         Outlet o = outletRepo.saveAndFlush(outlet);
 
         CreateOutletResponse createOutletResponse = new CreateOutletResponse(o.getId(),o.getOutletName(),
@@ -66,7 +68,7 @@ public class OutletServiceImp implements OutletService{
                 o.getDeliveryCost(),o.getAddress(),o.getCity(),o.getState(),o.getPrepaid(),o.getCompanyName(),
                 o.getPanCard(),o.getGstNo(),o.getFssaiNo(),o.getFssaiValidUpto(),o.getOutletClosedFrom(),
                 o.getOutletClosedTo(),
-                o.getActive(),o.getLogoImage(),o.getEmailId(),o.getMobileNo(),o.getStationCode());
+                o.getActive(),o.getCreatedAt(),o.getUpdatedAt(),o.getLogoImage(),o.getEmailId(),o.getMobileNo(),o.getStationCode());
 
         return new ResponseEntity<>(new ResponseDTO("success",null,createOutletResponse), HttpStatus.CREATED);
     }
