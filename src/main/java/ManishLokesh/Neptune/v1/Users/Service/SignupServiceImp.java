@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.v1.Users.Service;
 
-import ManishLokesh.Neptune.AuthController.JwtUtil;
+import ManishLokesh.Neptune.AuthController.JWTToke.JwtUtil;
 import ManishLokesh.Neptune.EmailTrigger.SendSignupOTP;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import ManishLokesh.Neptune.v1.Users.Entity.Login;

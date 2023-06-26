@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.v1.Outlets.Service;
 
-import ManishLokesh.Neptune.AuthController.JwtUtil;
+import ManishLokesh.Neptune.AuthController.JWTToke.JwtUtil;
 import ManishLokesh.Neptune.v1.Outlets.Entity.Outlet;
 import ManishLokesh.Neptune.v1.Outlets.ReponseBody.CreateOutletResponse;
 import ManishLokesh.Neptune.v1.Outlets.Repository.OutletRepo;

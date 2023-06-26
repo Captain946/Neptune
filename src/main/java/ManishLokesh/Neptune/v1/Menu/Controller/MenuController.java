@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.v1.Menu.Controller;
 
-import ManishLokesh.Neptune.AuthController.JwtUtil;
+import ManishLokesh.Neptune.AuthController.JWTToke.JwtUtil;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import ManishLokesh.Neptune.v1.Menu.RequestBody.CreateMenu;
 import ManishLokesh.Neptune.v1.Menu.Service.MenuService;

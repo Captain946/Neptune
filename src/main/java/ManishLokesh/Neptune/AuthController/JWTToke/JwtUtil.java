@@ -1,4 +1,4 @@
-package ManishLokesh.Neptune.AuthController;
+package ManishLokesh.Neptune.AuthController.JWTToke;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
