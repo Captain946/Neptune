@@ -11,9 +11,11 @@ public class OtpValidateResponse {
 
     private String jwt;
 
+    private String role;
+
     public OtpValidateResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
-                               String updatedAt,String jwt){
+                               String updatedAt,String jwt,String role){
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -22,9 +24,16 @@ public class OtpValidateResponse {
         this.gender = gender;
         this.updatedAt = updatedAt;
         this.jwt = jwt;
+        this.role = role;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public Long getId() {
         return id;

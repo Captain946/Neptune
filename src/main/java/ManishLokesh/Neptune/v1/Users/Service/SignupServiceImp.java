@@ -101,10 +101,12 @@ public class SignupServiceImp implements SignupService{
                     login.setGender(signup.getGender());
                     login.setPassword(signup.getPassword());
                     login.setCreatedAt(LocalDateTime.now().toString());
+                    String userRole = "ADMIN";
+                    login.setRole(userRole);
                     loginRepo.save(login);
                     String token = jwtUtil.generateToken(signup.getFullName());
                     OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
-                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt(),token);
+                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt(),token,userRole);
 
             return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
 
@@ -124,11 +126,13 @@ public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
         //&& Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
         if (Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())) {
             if (bCryptPasswordEncoder.matches(loginRequestBody.getPassword(), login.getPassword())) {
-                login.setLastLogin(org.joda.time.LocalDateTime.now().toString());
+                login.setLastLogin(LocalDateTime.now().toString());
                 loginRepo.save(login);
                 String token = jwtUtil.generateToken(login.getFullName());
-                final LoginResponse res = new LoginResponse(login.getId(), login.getCreatedAt(), login.getFullName(), login.getEmailId(),
-                        login.getMobileNumber(), login.getGender(), login.getUpdatedAt(), login.getLastLogin(),token);
+                final LoginResponse res = new LoginResponse(login.getId(), login.getCreatedAt(),
+                        login.getFullName(), login.getEmailId(),
+                        login.getMobileNumber(), login.getGender(), login.getUpdatedAt(),
+                        login.getLastLogin(),token,login.getRole());
 
                 return new ResponseEntity<>(new ResponseDTO("Success", null, res), HttpStatus.OK);
             } else {

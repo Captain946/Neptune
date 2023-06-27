@@ -1,7 +1,6 @@
 package ManishLokesh.Neptune.v1.Users.Entity;
 
 import jakarta.persistence.*;
-import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "Users")
@@ -19,6 +18,15 @@ public class Login {
     private String password;
     private String lastLogin;
 
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public Login(){
         super();

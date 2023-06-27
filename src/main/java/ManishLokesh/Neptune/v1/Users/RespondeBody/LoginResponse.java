@@ -10,11 +10,12 @@ public class LoginResponse {
     private String updatedAt;
     private String lastLogin;
     private String jwt;
+    private String role;
 
 
     public LoginResponse(Long id, String createdAt,
                                String fullName, String emailId, String mobileNumber, String gender,
-                               String updatedAt,String lastLogin,String jwt){
+                               String updatedAt,String lastLogin,String jwt,String role){
         this.id = id;
         this.createdAt = createdAt;
         this.fullName = fullName;
@@ -24,7 +25,16 @@ public class LoginResponse {
         this.updatedAt = updatedAt;
         this.lastLogin = lastLogin;
         this.jwt = jwt;
+        this.role = role;
 
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Long getId() {
