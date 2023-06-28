@@ -12,6 +12,7 @@ import ManishLokesh.Neptune.v1.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.v1.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.v1.Users.RespondeBody.OtpValidateResponse;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -122,8 +123,6 @@ public class SignupServiceImp implements SignupService{
 public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
     Login login = loginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
     if (login != null) {
-        //if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())
-        //&& Objects.equals(login.getPassword(), loginRequestBody.getPassword())){
         if (Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())) {
             if (bCryptPasswordEncoder.matches(loginRequestBody.getPassword(), login.getPassword())) {
                 login.setLastLogin(LocalDateTime.now().toString());

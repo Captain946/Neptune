@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.v2.customer.ResponseBody;
 
-public class LoginResponseBody {
+public class CustLoginResponseBody {
 
     private Long id;
     private String fullName;
@@ -14,9 +14,9 @@ public class LoginResponseBody {
     private String role;
 
 
-    public LoginResponseBody(Long id, String fullName, String createdAt, String mobileNumber,
-                             String emailId, String jwt, String gender, String updatedAt, String lastLogin,
-                             String role){
+    public CustLoginResponseBody(Long id, String fullName, String createdAt, String mobileNumber,
+                                 String emailId, String jwt, String gender, String updatedAt, String lastLogin,
+                                 String role){
         this.id = id;
         this.fullName = fullName;
         this.createdAt = createdAt;
