@@ -33,10 +33,8 @@ public class UserController {
 
 
     @PostMapping("/api/v1/signup")
-    public ResponseEntity<ResponseDTO> newUserSignup(@Valid @RequestBody SignupRequestBody SignupRequestBody){
-
-
-        return this.service.signup(SignupRequestBody);
+    public ResponseEntity<ResponseDTO> newUserSignup(@RequestBody SignupRequestBody SignRequestBody){
+        return this.service.signup(SignRequestBody);
     }
 
     @PostMapping("/api/v1/otp-validate")

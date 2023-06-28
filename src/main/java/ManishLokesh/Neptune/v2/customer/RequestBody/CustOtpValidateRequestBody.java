@@ -1,10 +1,9 @@
 package ManishLokesh.Neptune.v2.customer.RequestBody;
 
-public class LoginRequestBody {
-
+public class CustOtpValidateRequestBody {
 
     private String mobileNumber;
-    private String password;
+    private String otp;
 
     public String getMobileNumber() {
         return mobileNumber;
@@ -14,11 +13,11 @@ public class LoginRequestBody {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getPassword() {
-        return password;
+    public String getOtp() {
+        return otp;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

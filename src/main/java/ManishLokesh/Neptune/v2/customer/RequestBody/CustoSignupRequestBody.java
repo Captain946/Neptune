@@ -1,6 +1,6 @@
 package ManishLokesh.Neptune.v2.customer.RequestBody;
 
-public class SignupRequestBody {
+public class CustoSignupRequestBody {
 
     private String fullName;
     private String mobileNumber;

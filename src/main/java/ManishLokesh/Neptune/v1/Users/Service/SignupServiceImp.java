@@ -103,10 +103,10 @@ public class SignupServiceImp implements SignupService{
                     login.setCreatedAt(LocalDateTime.now().toString());
                     String userRole = "ADMIN";
                     login.setRole(userRole);
-                    loginRepo.save(login);
-                    String token = jwtUtil.generateToken(signup.getFullName());
-                    OtpValidateResponse res = new OtpValidateResponse(signup.getId(), signup.getCreatedAt(), signup.getFullName(), signup.getEmailId(),
-                    signup.getMobileNumber(),signup.getGender(), signup.getUpdatedAt(),token,userRole);
+                    Login login1 = loginRepo.saveAndFlush(login);
+                    String token = jwtUtil.generateToken(login1.getFullName());
+                    OtpValidateResponse res = new OtpValidateResponse(login1.getId(), login1.getCreatedAt(), login1.getFullName(), login1.getEmailId(),
+                            login1.getMobileNumber(),login1.getGender(), login1.getUpdatedAt(),token,userRole);
 
             return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
 
