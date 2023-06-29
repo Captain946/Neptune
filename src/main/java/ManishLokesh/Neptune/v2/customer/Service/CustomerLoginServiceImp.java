@@ -36,9 +36,6 @@ public class CustomerLoginServiceImp implements CustomerLoginService{
 
                     String token = jwtUtil.generateToken(login.getFullName());
 
-                    DateTime ist = DateTime.parse(login.getLastLogin());
-                    System.out.println(ist);
-
                     CustLoginResponseBody responseBody = new CustLoginResponseBody(login.getId(),
                             login.getFullName(),login.getCreatedAt(),loginRequestBody.getMobileNumber(),
                             login.getEmailId(),token,login.getGender(),login.getUpdatedAt(),login.getLastLogin(),
