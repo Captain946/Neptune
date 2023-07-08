@@ -11,3 +11,4 @@ public interface GetOutletRepo extends JpaRepository<Outlet, Long> {
     List<Outlet> findByStationCode(String stationCode);
 
 }
+
