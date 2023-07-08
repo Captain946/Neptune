@@ -17,6 +17,7 @@ public class GetOutletServiceimp implements GetOutletService{
     @Override
     public ResponseEntity<ResponseDTO> GetOutletAll() {
 
-        return new ResponseEntity<>(new ResponseDTO(
-                "success",null,outletRepo.findAll()), HttpStatus.OK);}
+        return new ResponseEntity<>(
+                new ResponseDTO("success",null,outletRepo.findAll()), HttpStatus.OK);
+    }
 }
