@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class GetOutletController {
@@ -13,9 +14,9 @@ public class GetOutletController {
     @Autowired
     public GetOutletService getOutletService;
 
-    @GetMapping("/api/v2/outlets")
-    public ResponseEntity<ResponseDTO> GetOutlet(){
+    @GetMapping("/api/v2/outlet/station/{stationCode}")
+    public ResponseEntity<ResponseDTO> GetOutlet(@PathVariable String stationCode){
 
-        return this.getOutletService.GetOutletAll();
+        return this.getOutletService.GetOutletAll(stationCode);
     }
 }
