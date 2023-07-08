@@ -3,8 +3,6 @@ package ManishLokesh.Neptune.v1.Menu.RequestBody;
 import java.sql.Array;
 
 public class CreateMenu {
-
-    private String outletId;
     private String name;
     private String description;
     private String basePrice;
@@ -21,10 +19,9 @@ public class CreateMenu {
     private String closingTime;
 
 
-    public CreateMenu(String outletId,String name,String description, String basePrice,String tax,
+    public CreateMenu(String name,String description, String basePrice,String tax,
                       String sellingPrice,String foodType,String cuisine, String tags, Boolean bulkOnly,
                       Boolean isVegeterian, String image, String customisations,String openingTime,String closingTime){
-        this.outletId = outletId;
         this.name = name;
         this.description = description;
         this.basePrice = basePrice;
@@ -39,14 +36,6 @@ public class CreateMenu {
         this.customisations = customisations;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
-    }
-
-    public String getOutletId() {
-        return outletId;
-    }
-
-    public void setOutletId(String outletId) {
-        this.outletId = outletId;
     }
 
     public String getName() {

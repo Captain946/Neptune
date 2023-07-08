@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MenuController {
@@ -26,11 +23,11 @@ public class MenuController {
 
 
 
-    @PostMapping("api/v1/add/menu")
-    public ResponseEntity<ResponseDTO>addNewMenu(@RequestBody CreateMenu createMenu, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
+    @PostMapping("api/v1/add/menu/outlet/{outletId}")
+    public ResponseEntity<ResponseDTO>addNewMenu(@PathVariable String outletId, @RequestBody CreateMenu createMenu, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
         String token = auth.replace("Bearer","");
         if(jwtUtil.validateToken(token)){
-            return this.Service.CreateNewMenu(createMenu);
+            return this.Service.CreateNewMenu(Long.parseLong(outletId), createMenu);
         }
         return new ResponseEntity<>(new ResponseDTO("failure","Not authorize to Access",null),HttpStatus.UNAUTHORIZED);
     }

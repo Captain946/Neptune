@@ -2,7 +2,6 @@ package ManishLokesh.Neptune.v1.Menu.ResponseBody;
 
 public class MenuResponse {
     private Long id;
-    private String outletId;
     private String name;
     private String description;
     private String basePrice;
@@ -24,12 +23,11 @@ public class MenuResponse {
 
 
 
-    public MenuResponse(Long id, String outletId, String name, String description, String basePrice, String tax,
+    public MenuResponse(Long id, String name, String description, String basePrice, String tax,
                         String sellingPrice, String foodType, String cuisine, String tags, Boolean bulkOnly,
                         Boolean isVegeterian, String image, String customisations, String openingTime,
                         String closingTime, String createdAt, String updatedAt, Boolean active){
         this.id = id;
-        this.outletId = outletId;
         this.name = name;
         this.description = description;
         this.basePrice = basePrice;
@@ -56,14 +54,6 @@ public class MenuResponse {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getOutletId() {
-        return outletId;
-    }
-
-    public void setOutletId(String outletId) {
-        this.outletId = outletId;
     }
 
     public String getName() {

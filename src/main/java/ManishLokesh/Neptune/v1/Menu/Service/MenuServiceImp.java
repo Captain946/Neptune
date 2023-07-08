@@ -26,16 +26,15 @@ public class MenuServiceImp implements MenuService {
     private OutletRepo outletRepo;
 
     @Override
-    public ResponseEntity<ResponseDTO> CreateNewMenu(CreateMenu createMenu) {
-        if(outletRepo.findById(valueOf(createMenu.getOutletId())).isPresent()){
-            System.out.println(Float.parseFloat(createMenu.getBasePrice()));
+    public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu) {
+        if(outletRepo.findById(valueOf(outletId)).isPresent()){
             if(((Float.parseFloat(createMenu.getBasePrice())) * 0.05) == Float.parseFloat(createMenu.getTax())){
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
                         == Float.parseFloat(createMenu.getSellingPrice()))){
                     Menu menu = new Menu();
                     menu.setCreatedAt(LocalDateTime.now().toString());
                     menu.setActive(false);
-                    menu.setOutletId(createMenu.getOutletId());
+                    menu.setOutletId(outletId.toString());
                     menu.setName(createMenu.getName());
                     menu.setBasePrice(createMenu.getBasePrice());
                     menu.setTax(createMenu.getTax());
@@ -52,7 +51,7 @@ public class MenuServiceImp implements MenuService {
                     menu.setClosingTime(createMenu.getClosingTime());
                     Menu m = menuRepo.saveAndFlush(menu);
 
-                    MenuResponse menuResponse = new MenuResponse(m.getId(), m.getOutletId(), m.getName(), m.getDescription(),
+                    MenuResponse menuResponse = new MenuResponse(m.getId(), m.getName(), m.getDescription(),
                             m.getBasePrice(), m.getTax(), m.getSellingPrice(), m.getFoodType(), m.getCuisine(), m.getTags(),
                             m.getBulkOnly(), m.getIsVegeterian(), m.getImage(), m.getCustomisations(), m.getOpeningTime(),
                             m.getClosingTime(), m.getCreatedAt(), m.getUpdatedAt(), m.getActive());
