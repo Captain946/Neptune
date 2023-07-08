@@ -4,6 +4,6 @@ import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface GetOutletService{
-    public ResponseEntity<ResponseDTO>GetOutletAll(stationCode);
+    public ResponseEntity<ResponseDTO>GetOutletAll(String stationCode);
 
 }

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface GetOutletRepo extends JpaRepository<Outlet, Long> {
-    List<Outlet> findByStationCode(StationCode stationCode);
+    List<Outlet> findByStationCode(String stationCode);
 
 }

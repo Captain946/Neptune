@@ -18,10 +18,11 @@ public class GetOutletServiceimp implements GetOutletService{
     public GetOutletRepo outletRepo;
 
     @Override
-    public ResponseEntity<ResponseDTO> GetOutletAll() {
+    public ResponseEntity<ResponseDTO> GetOutletAll(String stationCode) {
 
         List<Outlet> outletList = outletRepo.findByStationCode(stationCode);
         return new ResponseEntity<>(
-                new ResponseDTO("success",null,outletRepo.findAll()), HttpStatus.OK);
+                new ResponseDTO("success",null,outletList), HttpStatus.OK);
     }
+
 }
