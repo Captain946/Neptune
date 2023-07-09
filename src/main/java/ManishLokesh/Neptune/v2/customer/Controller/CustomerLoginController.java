@@ -1,13 +1,9 @@
 package ManishLokesh.Neptune.v2.customer.Controller;
 
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v1.Users.RequestBody.LoginRequestBody;
-import ManishLokesh.Neptune.v2.customer.Entity.CustomerLogin;
 import ManishLokesh.Neptune.v2.customer.RequestBody.CustoLoginRequestBody;
 import ManishLokesh.Neptune.v2.customer.Service.CustomerLoginService;
-import ManishLokesh.Neptune.v2.customer.Service.CustomerSignUpService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

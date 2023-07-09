@@ -2,7 +2,7 @@ package ManishLokesh.Neptune.v2.customer.Service;
 
 import ManishLokesh.Neptune.AuthController.JwtUtil;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v2.customer.Entity.CustomerLogin;
+import ManishLokesh.Neptune.v2.customer.Entity.Customer;
 import ManishLokesh.Neptune.v2.customer.Repository.CustLoginRepo;
 import ManishLokesh.Neptune.v2.customer.RequestBody.CustoLoginRequestBody;
 import ManishLokesh.Neptune.v2.customer.ResponseBody.CustLoginResponseBody;
@@ -27,7 +27,7 @@ public class CustomerLoginServiceImp implements CustomerLoginService{
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Override
     public ResponseEntity<ResponseDTO> CustomerAuthLogin(CustoLoginRequestBody loginRequestBody) {
-        CustomerLogin login = custLoginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
+        Customer login = custLoginRepo.findByMobileNumber(loginRequestBody.getMobileNumber());
         if(login != null){
             if(Objects.equals(login.getMobileNumber(), loginRequestBody.getMobileNumber())){
                 if (bCryptPasswordEncoder.matches(loginRequestBody.getPassword(),login.getPassword())) {

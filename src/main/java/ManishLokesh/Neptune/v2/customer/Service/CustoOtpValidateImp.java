@@ -2,7 +2,7 @@ package ManishLokesh.Neptune.v2.customer.Service;
 
 import ManishLokesh.Neptune.AuthController.JwtUtil;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v2.customer.Entity.CustomerLogin;
+import ManishLokesh.Neptune.v2.customer.Entity.Customer;
 import ManishLokesh.Neptune.v2.customer.Entity.CustomerSignup;
 import ManishLokesh.Neptune.v2.customer.Repository.CustLoginRepo;
 import ManishLokesh.Neptune.v2.customer.Repository.CustSignupRepo;
@@ -40,9 +40,9 @@ public class CustoOtpValidateImp implements CustomerOtpValidateService{
                         "Incorrect OTP value",null)
                         , HttpStatus.BAD_REQUEST);
             }else{
-                CustomerLogin login = custLoginRepo.findByMobileNumber(validateRequestBody.getMobileNumber());
+                Customer login = custLoginRepo.findByMobileNumber(validateRequestBody.getMobileNumber());
                 if(login == null){
-                    CustomerLogin customerLogin = new CustomerLogin();
+                    Customer customerLogin = new Customer();
                     customerLogin.setCreatedAt(LocalDateTime.now().toString());
                     customerLogin.setGender(signup.getGender());
                     customerLogin.setFullName(signup.getFullName());
@@ -52,7 +52,7 @@ public class CustoOtpValidateImp implements CustomerOtpValidateService{
                     customerLogin.setLastLogin(LocalDateTime.now().toString());
                     String role = "CUSTOMER";
                     customerLogin.setRole(role);
-                    CustomerLogin login1 = custLoginRepo.saveAndFlush(customerLogin);
+                    Customer login1 = custLoginRepo.saveAndFlush(customerLogin);
                     String token = jwtUtil.generateToken(login1.getFullName());
                     CustOtpValidateResponseBody custOtpValidateResponseBody = new CustOtpValidateResponseBody(login1.getId(),
                             login1.getCreatedAt(),login1.getFullName(),login1.getEmailId(),login1.getMobileNumber(),login1.getGender(),

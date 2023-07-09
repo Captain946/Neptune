@@ -2,7 +2,7 @@ package ManishLokesh.Neptune.v2.customer.Service;
 
 import ManishLokesh.Neptune.EmailTrigger.SendSignupOTP;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v2.customer.Entity.CustomerLogin;
+import ManishLokesh.Neptune.v2.customer.Entity.Customer;
 import ManishLokesh.Neptune.v2.customer.Entity.CustomerSignup;
 import ManishLokesh.Neptune.v2.customer.Repository.CustLoginRepo;
 import ManishLokesh.Neptune.v2.customer.Repository.CustSignupRepo;
@@ -35,7 +35,7 @@ public class CustomerSignUpServiceImp implements CustomerSignUpService{
     public ResponseEntity<ResponseDTO> newCustomerSignUp(CustoSignupRequestBody requestBody) {
         CustomerSignup exist = signupRepo.findByMobileNumber(requestBody.getMobileNumber());
         if(exist != null){
-            CustomerLogin already = loginRepo.findByMobileNumber(requestBody.getMobileNumber());
+            Customer already = loginRepo.findByMobileNumber(requestBody.getMobileNumber());
             if(already != null){
                 return new ResponseEntity<>(new ResponseDTO("failure",
                         "Mobile number already exist, Please try with another Mobile Number",
