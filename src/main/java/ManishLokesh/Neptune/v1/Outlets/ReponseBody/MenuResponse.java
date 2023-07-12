@@ -1,13 +1,6 @@
-package ManishLokesh.Neptune.v1.Menu.Entity;
+package ManishLokesh.Neptune.v1.Outlets.ReponseBody;
 
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "menus")
-public class Menu {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+public class MenuResponse {
     private Long id;
     private String outletId;
     private String name;
@@ -27,6 +20,34 @@ public class Menu {
     private String createdAt;
     private String updatedAt;
     private Boolean active;
+
+
+
+
+    public MenuResponse(Long id, String outletId, String name, String description, String basePrice, String tax,
+                        String sellingPrice, String foodType, String cuisine, String tags, Boolean bulkOnly,
+                        Boolean isVegeterian, String image, String customisations, String openingTime,
+                        String closingTime, String createdAt, String updatedAt, Boolean active){
+        this.id = id;
+        this.outletId = outletId;
+        this.name = name;
+        this.description = description;
+        this.basePrice = basePrice;
+        this.tax = tax;
+        this.sellingPrice = sellingPrice;
+        this.foodType = foodType;
+        this.cuisine = cuisine;
+        this.tags = tags;
+        this.bulkOnly = bulkOnly;
+        this.isVegeterian = isVegeterian;
+        this.image = image;
+        this.customisations = customisations;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.active = active;
+    }
 
 
     public Long getId() {
@@ -181,5 +202,3 @@ public class Menu {
         this.active = active;
     }
 }
-
-

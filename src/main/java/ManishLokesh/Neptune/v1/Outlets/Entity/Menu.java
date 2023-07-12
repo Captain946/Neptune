@@ -1,9 +1,14 @@
-package ManishLokesh.Neptune.v1.Menu.RequestBody;
+package ManishLokesh.Neptune.v1.Outlets.Entity;
 
-import java.sql.Array;
 
-public class CreateMenu {
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "menus")
+public class Menu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String outletId;
     private String name;
     private String description;
@@ -19,26 +24,17 @@ public class CreateMenu {
     private String customisations;
     private String openingTime;
     private String closingTime;
+    private String createdAt;
+    private String updatedAt;
+    private Boolean active;
 
 
-    public CreateMenu(String outletId,String name,String description, String basePrice,String tax,
-                      String sellingPrice,String foodType,String cuisine, String tags, Boolean bulkOnly,
-                      Boolean isVegeterian, String image, String customisations,String openingTime,String closingTime){
-        this.outletId = outletId;
-        this.name = name;
-        this.description = description;
-        this.basePrice = basePrice;
-        this.tax = tax;
-        this.sellingPrice = sellingPrice;
-        this.foodType = foodType;
-        this.cuisine = cuisine;
-        this.tags = tags;
-        this.bulkOnly = bulkOnly;
-        this.isVegeterian = isVegeterian;
-        this.image = image;
-        this.customisations = customisations;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOutletId() {
@@ -160,4 +156,30 @@ public class CreateMenu {
     public void setClosingTime(String closingTime) {
         this.closingTime = closingTime;
     }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
+
+
