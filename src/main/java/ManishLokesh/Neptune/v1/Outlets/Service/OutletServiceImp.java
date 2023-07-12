@@ -80,8 +80,8 @@ public class OutletServiceImp implements OutletService{
 
 
     @Override
-    public ResponseEntity<ResponseDTO> CreateNewMenu(CreateMenu createMenu) {
-        if(outletRepo.findById(valueOf(createMenu.getOutletId())).isPresent()){
+    public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu) {
+        if(outletRepo.findById(outletId).isPresent()){
             if(((Float.parseFloat(createMenu.getBasePrice())) * 0.05) == Float.parseFloat(createMenu.getTax())){
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
                         == Float.parseFloat(createMenu.getSellingPrice()))){

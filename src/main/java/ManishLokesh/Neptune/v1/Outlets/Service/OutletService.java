@@ -9,6 +9,6 @@ public interface OutletService {
 
     public ResponseEntity<ResponseDTO> CreateNewOutlet(CreateOutlet createOutlet);
 
-    public ResponseEntity<ResponseDTO> CreateNewMenu(CreateMenu createMenu);
+    public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu);
 
 }
