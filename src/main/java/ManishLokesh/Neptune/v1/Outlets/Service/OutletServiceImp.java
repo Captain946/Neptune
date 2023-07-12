@@ -89,7 +89,7 @@ public class OutletServiceImp implements OutletService{
                     Menu menu = new Menu();
                     menu.setCreatedAt(LocalDateTime.now().toString());
                     menu.setActive(false);
-                    menu.setOutletId(createMenu.getOutletId());
+                    menu.setOutletId(outletId.toString());
                     menu.setName(createMenu.getName());
                     menu.setBasePrice(createMenu.getBasePrice());
                     menu.setTax(createMenu.getTax());
@@ -106,7 +106,7 @@ public class OutletServiceImp implements OutletService{
                     menu.setClosingTime(createMenu.getClosingTime());
                     Menu m = menuRepo.saveAndFlush(menu);
 
-                    MenuResponse menuResponse = new MenuResponse(m.getId(), m.getOutletId(), m.getName(), m.getDescription(),
+                    MenuResponse menuResponse = new MenuResponse(m.getId(), m.getName(), m.getDescription(),
                             m.getBasePrice(), m.getTax(), m.getSellingPrice(), m.getFoodType(), m.getCuisine(), m.getTags(),
                             m.getBulkOnly(), m.getIsVegeterian(), m.getImage(), m.getCustomisations(), m.getOpeningTime(),
                             m.getClosingTime(), m.getCreatedAt(), m.getUpdatedAt(), m.getActive());
