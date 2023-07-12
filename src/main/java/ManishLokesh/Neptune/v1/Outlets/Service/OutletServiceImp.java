@@ -26,7 +26,8 @@ import static java.lang.Long.valueOf;
 public class OutletServiceImp implements OutletService{
 
     private Logger logger = LoggerFactory.getLogger("app.OutletService");
-    public   OutletRepo outletRepo;
+    @Autowired
+    public OutletRepo outletRepo;
     @Autowired
     public MenuRepo menuRepo;
 
@@ -81,7 +82,7 @@ public class OutletServiceImp implements OutletService{
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu) {
-        if(outletRepo.findById(outletId).isPresent()){
+        if(outletRepo.findById(valueOf(outletId)).isPresent()){
             if(((Float.parseFloat(createMenu.getBasePrice())) * 0.05) == Float.parseFloat(createMenu.getTax())){
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
                         == Float.parseFloat(createMenu.getSellingPrice()))){
