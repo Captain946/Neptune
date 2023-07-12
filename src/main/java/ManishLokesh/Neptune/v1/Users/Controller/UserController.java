@@ -21,16 +21,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 public class UserController {
 
     @Autowired
-    private SignupRepo signupRepo;
-    @Autowired
-    private LoginRepo loginRepo;
-
-    @Autowired
     private SignupService service;
-
-    private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
-
-
 
     @PostMapping("/api/v1/signup")
     public ResponseEntity<ResponseDTO> newUserSignup(@RequestBody SignupRequestBody SignRequestBody){

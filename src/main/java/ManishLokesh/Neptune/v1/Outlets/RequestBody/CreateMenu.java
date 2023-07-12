@@ -1,7 +1,8 @@
-package ManishLokesh.Neptune.v1.Menu.ResponseBody;
+package ManishLokesh.Neptune.v1.Outlets.RequestBody;
 
-public class MenuResponse {
-    private Long id;
+import java.sql.Array;
+
+public class CreateMenu {
     private String name;
     private String description;
     private String basePrice;
@@ -16,18 +17,11 @@ public class MenuResponse {
     private String customisations;
     private String openingTime;
     private String closingTime;
-    private String createdAt;
-    private String updatedAt;
-    private Boolean active;
 
 
-
-
-    public MenuResponse(Long id, String name, String description, String basePrice, String tax,
-                        String sellingPrice, String foodType, String cuisine, String tags, Boolean bulkOnly,
-                        Boolean isVegeterian, String image, String customisations, String openingTime,
-                        String closingTime, String createdAt, String updatedAt, Boolean active){
-        this.id = id;
+    public CreateMenu(String name,String description, String basePrice,String tax,
+                      String sellingPrice,String foodType,String cuisine, String tags, Boolean bulkOnly,
+                      Boolean isVegeterian, String image, String customisations,String openingTime,String closingTime){
         this.name = name;
         this.description = description;
         this.basePrice = basePrice;
@@ -42,18 +36,6 @@ public class MenuResponse {
         this.customisations = customisations;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.active = active;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -166,29 +148,5 @@ public class MenuResponse {
 
     public void setClosingTime(String closingTime) {
         this.closingTime = closingTime;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 }
