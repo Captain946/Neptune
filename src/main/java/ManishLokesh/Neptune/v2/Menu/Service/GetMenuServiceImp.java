@@ -1,7 +1,7 @@
 package ManishLokesh.Neptune.v2.Menu.Service;
 
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v1.Outlets.Entity.Menu;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
 import ManishLokesh.Neptune.v2.Menu.Repository.GetMenuRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

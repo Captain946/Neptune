@@ -1,8 +1,15 @@
-package ManishLokesh.Neptune.v1.Outlets.ReponseBody;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Entity;
 
-public class CreateOutletResponse <T>{
+import javax.persistence.*;
 
+@Entity
+@Table(name = "outlets")
+public class Outlet {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String createdAt;
+    private String updatedAt;
     private String outletName;
     private Long minOrderValue;
     private Integer orderTiming;
@@ -21,52 +28,12 @@ public class CreateOutletResponse <T>{
     private String outletClosedFrom;
     private String outletClosedTo;
     private Boolean active;
-    private String createdAt;
-    private String updatedAt;
     private String logoImage;
     private String emailId;
     private String mobileNo;
     private String stationCode;
-
-
-
-
-    public CreateOutletResponse(Long id, String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
-                                String closingTime, Integer deliveryCost, String address, String city, String state,
-                                Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
-                                String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
-                                String createdAt, String updatedAt, String logoImage, String emailId, String mobileNo, String stationCode){
-        this.id = id;
-        this.outletName = outletName;
-        this.minOrderValue = minOrderValue;
-        this.orderTiming = orderTiming;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
-        this.deliveryCost = deliveryCost;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.prepaid = prepaid;
-        this.companyName = companyName;
-        this.panCard = panCard;
-        this.gstNo = gstNo;
-        this.fssaiNo = fssaiNo;
-        this.fssaiValidUpto = fssaiValidUpto;
-        this.outletClosedFrom = outletClosedFrom;
-        this.outletClosedTo = outletClosedTo;
-        this.active = active;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.logoImage = logoImage;
-        this.emailId = emailId;
-        this.mobileNo = mobileNo;
-        this.stationCode = stationCode;
-    }
-
-
-    public CreateOutletResponse(){
-    }
-
+    private Integer ratingCount;
+    private Double ratingValue;
 
     public Long getId() {
         return id;
@@ -74,6 +41,22 @@ public class CreateOutletResponse <T>{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getOutletName() {
@@ -252,19 +235,19 @@ public class CreateOutletResponse <T>{
         this.stationCode = stationCode;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public Integer getRatingCount() {
+        return ratingCount;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setRatingCount(Integer ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public Double getRatingValue() {
+        return ratingValue;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setRatingValue(Double ratingValue) {
+        this.ratingValue = ratingValue;
     }
 }

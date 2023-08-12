@@ -1,8 +1,5 @@
 package ManishLokesh.Neptune.v1.Users.RequestBody;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class LoginRequestBody {
 
     private String mobileNumber;

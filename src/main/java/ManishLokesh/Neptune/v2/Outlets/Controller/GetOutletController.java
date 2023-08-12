@@ -16,7 +16,6 @@ public class GetOutletController {
 
     @GetMapping("/api/v2/outlet/station/{stationCode}")
     public ResponseEntity<ResponseDTO> GetOutlet(@PathVariable String stationCode){
-
         return this.getOutletService.GetOutletAll(stationCode);
     }
 }

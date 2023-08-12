@@ -1,20 +1,14 @@
 package ManishLokesh.Neptune.v1.Users.Controller;
-
-import ManishLokesh.Neptune.EmailTrigger.SendSignupOTP;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
-import ManishLokesh.Neptune.v1.Users.Repository.LoginRepo;
-import ManishLokesh.Neptune.v1.Users.Repository.SignupRepo;
 import ManishLokesh.Neptune.v1.Users.RequestBody.LoginRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.v1.Users.Service.SignupService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static java.util.concurrent.CompletableFuture.runAsync;
-import static java.util.concurrent.CompletableFuture.supplyAsync;
+import javax.validation.Valid;
 
 
 @RestController

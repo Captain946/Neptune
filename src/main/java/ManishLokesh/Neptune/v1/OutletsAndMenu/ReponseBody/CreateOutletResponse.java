@@ -1,7 +1,8 @@
-package ManishLokesh.Neptune.v1.Outlets.RequestBody;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody;
 
-public class CreateOutlet {
-    private String stationCode;
+public class CreateOutletResponse <T>{
+
+    private Long id;
     private String outletName;
     private Long minOrderValue;
     private Integer orderTiming;
@@ -20,16 +21,22 @@ public class CreateOutlet {
     private String outletClosedFrom;
     private String outletClosedTo;
     private Boolean active;
+    private String createdAt;
+    private String updatedAt;
     private String logoImage;
     private String emailId;
     private String mobileNo;
+    private String stationCode;
 
 
-    public CreateOutlet(String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
-                        String closingTime, Integer deliveryCost, String address, String city, String state,
-                        Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
-                        String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
-                        String logoImage, String emailId, String mobileNo, String stationCode){
+
+
+    public CreateOutletResponse(Long id, String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
+                                String closingTime, Integer deliveryCost, String address, String city, String state,
+                                Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
+                                String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
+                                String createdAt, String updatedAt, String logoImage, String emailId, String mobileNo, String stationCode){
+        this.id = id;
         this.outletName = outletName;
         this.minOrderValue = minOrderValue;
         this.orderTiming = orderTiming;
@@ -48,23 +55,25 @@ public class CreateOutlet {
         this.outletClosedFrom = outletClosedFrom;
         this.outletClosedTo = outletClosedTo;
         this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.logoImage = logoImage;
         this.emailId = emailId;
         this.mobileNo = mobileNo;
         this.stationCode = stationCode;
     }
 
-    public CreateOutlet(){
 
+    public CreateOutletResponse(){
     }
 
 
-    public String getStationCode() {
-        return stationCode;
+    public Long getId() {
+        return id;
     }
 
-    public void setStationCode(String stationCode) {
-        this.stationCode = stationCode;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOutletName() {
@@ -233,5 +242,29 @@ public class CreateOutlet {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
+    }
+
+    public String getStationCode() {
+        return stationCode;
+    }
+
+    public void setStationCode(String stationCode) {
+        this.stationCode = stationCode;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

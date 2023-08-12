@@ -1,9 +1,9 @@
-package ManishLokesh.Neptune.v1.Outlets.Controller;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Controller;
 
 import ManishLokesh.Neptune.AuthController.JwtUtil;
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateMenu;
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateOutlet;
-import ManishLokesh.Neptune.v1.Outlets.Service.OutletService;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateMenu;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateOutlet;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Service.OutletService;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class OutletController {
-
     @Autowired
     public OutletService outletService;
-
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -38,5 +36,4 @@ public class OutletController {
         }
         return new ResponseEntity<>(new ResponseDTO("failure","Not authorize to Access",null),HttpStatus.UNAUTHORIZED);
     }
-
 }

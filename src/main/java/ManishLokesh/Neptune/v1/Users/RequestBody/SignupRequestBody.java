@@ -1,7 +1,6 @@
 package ManishLokesh.Neptune.v1.Users.RequestBody;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class SignupRequestBody {
 

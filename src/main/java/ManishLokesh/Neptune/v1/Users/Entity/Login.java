@@ -1,6 +1,7 @@
 package ManishLokesh.Neptune.v1.Users.Entity;
 
-import jakarta.persistence.*;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Users")

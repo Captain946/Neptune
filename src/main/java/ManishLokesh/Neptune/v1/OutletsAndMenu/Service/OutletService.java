@@ -1,7 +1,7 @@
-package ManishLokesh.Neptune.v1.Outlets.Service;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Service;
 
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateMenu;
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateOutlet;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateMenu;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateOutlet;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import org.springframework.http.ResponseEntity;
 

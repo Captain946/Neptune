@@ -1,18 +1,7 @@
-package ManishLokesh.Neptune.v1.Outlets.Entity;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody;
 
-
-import jakarta.persistence.*;
-
-
-@Entity
-@Table(name = "outlets")
-public class Outlet {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    private String createdAt;
-    private String updatedAt;
+public class CreateOutlet {
+    private String stationCode;
     private String outletName;
     private Long minOrderValue;
     private Integer orderTiming;
@@ -34,32 +23,48 @@ public class Outlet {
     private String logoImage;
     private String emailId;
     private String mobileNo;
-    private String stationCode;
-    private Integer ratingCount;
-    private Double ratingValue;
 
-    public Long getId() {
-        return id;
+
+    public CreateOutlet(String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
+                        String closingTime, Integer deliveryCost, String address, String city, String state,
+                        Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
+                        String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
+                        String logoImage, String emailId, String mobileNo, String stationCode){
+        this.outletName = outletName;
+        this.minOrderValue = minOrderValue;
+        this.orderTiming = orderTiming;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.deliveryCost = deliveryCost;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.prepaid = prepaid;
+        this.companyName = companyName;
+        this.panCard = panCard;
+        this.gstNo = gstNo;
+        this.fssaiNo = fssaiNo;
+        this.fssaiValidUpto = fssaiValidUpto;
+        this.outletClosedFrom = outletClosedFrom;
+        this.outletClosedTo = outletClosedTo;
+        this.active = active;
+        this.logoImage = logoImage;
+        this.emailId = emailId;
+        this.mobileNo = mobileNo;
+        this.stationCode = stationCode;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public CreateOutlet(){
+
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+
+    public String getStationCode() {
+        return stationCode;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setStationCode(String stationCode) {
+        this.stationCode = stationCode;
     }
 
     public String getOutletName() {
@@ -228,29 +233,5 @@ public class Outlet {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
-    }
-
-    public String getStationCode() {
-        return stationCode;
-    }
-
-    public void setStationCode(String stationCode) {
-        this.stationCode = stationCode;
-    }
-
-    public Integer getRatingCount() {
-        return ratingCount;
-    }
-
-    public void setRatingCount(Integer ratingCount) {
-        this.ratingCount = ratingCount;
-    }
-
-    public Double getRatingValue() {
-        return ratingValue;
-    }
-
-    public void setRatingValue(Double ratingValue) {
-        this.ratingValue = ratingValue;
     }
 }

@@ -12,7 +12,6 @@ import ManishLokesh.Neptune.v1.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.v1.Users.RespondeBody.LoginResponse;
 import ManishLokesh.Neptune.v1.Users.RespondeBody.OtpValidateResponse;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +25,14 @@ import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Service
 public class SignupServiceImp implements SignupService{
-
     @Autowired
     public SignupRepo signupRepo;
-
     @Autowired
     public LoginRepo loginRepo;
-
     @Autowired
     private JwtUtil jwtUtil;
-
     private final SendSignupOTP sendSignupOTP = new SendSignupOTP();
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
     @Override
     public ResponseEntity<ResponseDTO> signup(SignupRequestBody requestBody) {
         Signup exist = signupRepo.findByMobileNumber(requestBody.getMobileNumber());
@@ -76,7 +70,6 @@ public class SignupServiceImp implements SignupService{
         runAsync(() -> sendSignupOTP.sendOTP(signup.getEmailId(), otp));
         return new ResponseEntity<>(new ResponseDTO<>("success",null,
                 "OTP sent to the registered Email Id"),HttpStatus.OK);
-
     }
 
     @Override
@@ -86,10 +79,8 @@ public class SignupServiceImp implements SignupService{
             return new ResponseEntity<>(new ResponseDTO("failure","Incorrect mobile number",
                     null),HttpStatus.BAD_REQUEST);
         }else{
-
             Signup signup = signupRepo.findByMobileNumber(otpValidateRequestBody.getMobileNumber());
             if(!Objects.equals(signup.getOtp(), otpValidateRequestBody.getOtp())){
-
                 return new ResponseEntity<>(new ResponseDTO("failure","Incorrect OTP Value",
                         null),HttpStatus.BAD_REQUEST);
             }else{
@@ -108,15 +99,13 @@ public class SignupServiceImp implements SignupService{
                     String token = jwtUtil.generateToken(login1.getFullName());
                     OtpValidateResponse res = new OtpValidateResponse(login1.getId(), login1.getCreatedAt(), login1.getFullName(), login1.getEmailId(),
                             login1.getMobileNumber(),login1.getGender(), login1.getUpdatedAt(),token,userRole);
-
             return new ResponseEntity<>(new ResponseDTO("Success",null,res) ,HttpStatus.OK);
-
         }else{
             return new ResponseEntity<>(new ResponseDTO("failure","Account already Created",
                     null),HttpStatus.BAD_REQUEST);
+                }
+            }
         }
-    }
-}
     }
 
 @Override
@@ -145,6 +134,7 @@ public ResponseEntity<ResponseDTO> login(LoginRequestBody loginRequestBody) {
     }else{
     return new ResponseEntity<>(new ResponseDTO("failure", "Incorrect mobile number",
             null), HttpStatus.BAD_REQUEST);
-}
+        }
     }
 }
+

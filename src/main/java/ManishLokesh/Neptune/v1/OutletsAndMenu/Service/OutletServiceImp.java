@@ -1,14 +1,13 @@
-package ManishLokesh.Neptune.v1.Outlets.Service;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Service;
 
-import ManishLokesh.Neptune.AuthController.JwtUtil;
-import ManishLokesh.Neptune.v1.Outlets.Entity.Menu;
-import ManishLokesh.Neptune.v1.Outlets.Entity.Outlet;
-import ManishLokesh.Neptune.v1.Outlets.ReponseBody.CreateOutletResponse;
-import ManishLokesh.Neptune.v1.Outlets.ReponseBody.MenuResponse;
-import ManishLokesh.Neptune.v1.Outlets.Repository.MenuRepo;
-import ManishLokesh.Neptune.v1.Outlets.Repository.OutletRepo;
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateMenu;
-import ManishLokesh.Neptune.v1.Outlets.RequestBody.CreateOutlet;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Outlet;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.CreateOutletResponse;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.MenuResponse;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.MenuRepo;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.OutletRepo;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateMenu;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateOutlet;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ import static java.lang.Long.valueOf;
 public class OutletServiceImp implements OutletService{
 
     private Logger logger = LoggerFactory.getLogger("app.OutletService");
-    @Autowired
+    @Autowired(required = true)
     public OutletRepo outletRepo;
-    @Autowired
+    @Autowired(required = true)
     public MenuRepo menuRepo;
 
 
@@ -77,7 +76,6 @@ public class OutletServiceImp implements OutletService{
         return new ResponseEntity<>(new ResponseDTO("success",null,createOutletResponse),
                 HttpStatus.CREATED);
     }
-
 
 
     @Override

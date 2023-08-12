@@ -1,7 +1,13 @@
-package ManishLokesh.Neptune.v1.Outlets.ReponseBody;
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Entity;
 
-public class MenuResponse {
+import javax.persistence.*;
+@Entity
+@Table(name = "menus")
+public class Menu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String outletId;
     private String name;
     private String description;
     private String basePrice;
@@ -21,39 +27,20 @@ public class MenuResponse {
     private Boolean active;
 
 
-
-
-    public MenuResponse(Long id, String name, String description, String basePrice, String tax,
-                        String sellingPrice, String foodType, String cuisine, String tags, Boolean bulkOnly,
-                        Boolean isVegeterian, String image, String customisations, String openingTime,
-                        String closingTime, String createdAt, String updatedAt, Boolean active){
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.basePrice = basePrice;
-        this.tax = tax;
-        this.sellingPrice = sellingPrice;
-        this.foodType = foodType;
-        this.cuisine = cuisine;
-        this.tags = tags;
-        this.bulkOnly = bulkOnly;
-        this.isVegeterian = isVegeterian;
-        this.image = image;
-        this.customisations = customisations;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.active = active;
-    }
-
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOutletId() {
+        return outletId;
+    }
+
+    public void setOutletId(String outletId) {
+        this.outletId = outletId;
     }
 
     public String getName() {
@@ -192,3 +179,5 @@ public class MenuResponse {
         this.active = active;
     }
 }
+
+
