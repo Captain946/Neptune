@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GetOutletServiceimp implements GetOutletService{
@@ -21,8 +22,8 @@ public class GetOutletServiceimp implements GetOutletService{
     public ResponseEntity<ResponseDTO> GetOutletAll(String stationCode) {
 
         List<Outlet> outletList = outletRepo.findByStationCode(stationCode);
+        List<Outlet> activeOutlets = outletList.stream().filter(Outlet::getActive).collect(Collectors.toList());
         return new ResponseEntity<>(
-                new ResponseDTO("success",null,outletList), HttpStatus.OK);
+                new ResponseDTO("success",null,activeOutlets), HttpStatus.OK);
     }
-
 }

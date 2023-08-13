@@ -5,6 +5,7 @@ public class ResponseDTO<T>{
     public String error;
     public Object result;
 
+
     public ResponseDTO(String status, String error, Object result) {
         this.status = status;
         this.error = error;

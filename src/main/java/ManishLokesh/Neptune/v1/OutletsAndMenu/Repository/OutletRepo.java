@@ -9,7 +9,5 @@ import java.util.Optional;
 @Repository
 public interface OutletRepo extends JpaRepository<Outlet, Long> {
      Outlet saveAndFlush(Outlet outlet);
-
      Optional<Outlet> findById(Long Id);
-
 }

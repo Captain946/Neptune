@@ -16,8 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static java.lang.Long.valueOf;
 
@@ -25,9 +27,9 @@ import static java.lang.Long.valueOf;
 public class OutletServiceImp implements OutletService{
 
     private Logger logger = LoggerFactory.getLogger("app.OutletService");
-    @Autowired(required = true)
+    @Autowired
     public OutletRepo outletRepo;
-    @Autowired(required = true)
+    @Autowired
     public MenuRepo menuRepo;
 
 
@@ -77,10 +79,45 @@ public class OutletServiceImp implements OutletService{
                 HttpStatus.CREATED);
     }
 
+    @Override
+    public ResponseEntity<ResponseDTO> UpdateOutlet(CreateOutlet updateOutlet,Long outletId) {
+        Optional <Outlet> outletDetails = outletRepo.findById(outletId);
+        if(outletDetails.isPresent()){
+            Outlet outlet = outletDetails.get();
+            outlet.setStationCode(updateOutlet.getStationCode());
+            outlet.setUpdatedAt(LocalDateTime.now().toString());
+            outlet.setOutletName(updateOutlet.getOutletName());
+            outlet.setMinOrderValue(updateOutlet.getMinOrderValue());
+            outlet.setOrderTiming(updateOutlet.getOrderTiming());
+            outlet.setOpeningTime(updateOutlet.getOpeningTime());
+            outlet.setClosingTime(updateOutlet.getClosingTime());
+            outlet.setDeliveryCost(updateOutlet.getDeliveryCost());
+            outlet.setAddress(updateOutlet.getAddress());
+            outlet.setState(updateOutlet.getState());
+            outlet.setCity(updateOutlet.getCity());
+            outlet.setPrepaid(updateOutlet.getPrepaid());
+            outlet.setCompanyName(updateOutlet.getCompanyName());
+            outlet.setPanCard(updateOutlet.getPanCard());
+            outlet.setGstNo(updateOutlet.getGstNo());
+            outlet.setFssaiNo(updateOutlet.getFssaiNo());
+            outlet.setFssaiValidUpto(updateOutlet.getFssaiValidUpto());
+            outlet.setOutletClosedTo(updateOutlet.getOutletClosedTo());
+            outlet.setOutletClosedFrom(updateOutlet.getOutletClosedFrom());
+            outlet.setLogoImage(updateOutlet.getLogoImage());
+            outlet.setEmailId(updateOutlet.getEmailId());
+            outlet.setMobileNo(updateOutlet.getMobileNo());
+            outletRepo.save(outlet);
+            return new ResponseEntity<>(new ResponseDTO<>("success",null,outlet),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO<>("failure","outlet is not found",null),
+                HttpStatus.BAD_REQUEST);
+    }
+
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu) {
-        if(outletRepo.findById(valueOf(outletId)).isPresent()){
+        if(outletRepo.findById(outletId).isPresent()){
             if(((Float.parseFloat(createMenu.getBasePrice())) * 0.05) == Float.parseFloat(createMenu.getTax())){
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
                         == Float.parseFloat(createMenu.getSellingPrice()))){
@@ -120,5 +157,76 @@ public class OutletServiceImp implements OutletService{
         }else {
             return new ResponseEntity<>(new ResponseDTO<>("failure", "Outlet is not Present", null), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> UpdateMenu(CreateMenu updateMenu, Long outletId, Long menuId) {
+        Optional<Outlet> outletDetails = outletRepo.findById(outletId);
+        if(outletDetails.isPresent()){
+            Optional<Menu> menuDetails = menuRepo.findById(menuId);
+            if(menuDetails.isPresent()){
+                if((Float.parseFloat(updateMenu.getBasePrice()) * 0.05) == Float.parseFloat(updateMenu.getTax())){
+                    if((Float.parseFloat(updateMenu.getBasePrice()) + Float.parseFloat(updateMenu.getTax())) == Float.parseFloat(updateMenu.getSellingPrice())){
+                        Menu menu = menuDetails.get();
+                        menu.setUpdatedAt(LocalDateTime.now().toString());
+                        menu.setName(updateMenu.getName());
+                        menu.setImage(updateMenu.getImage());
+                        menu.setDescription(updateMenu.getDescription());
+                        menu.setBasePrice(updateMenu.getBasePrice());
+                        menu.setTax(updateMenu.getTax());
+                        menu.setSellingPrice(updateMenu.getSellingPrice());
+                        menu.setFoodType(updateMenu.getFoodType());
+                        menu.setCuisine(updateMenu.getCuisine());
+                        menu.setTags(updateMenu.getTags());
+                        menu.setBulkOnly(updateMenu.getBulkOnly());
+                        menu.setIsVegeterian(updateMenu.getIsVegeterian());
+                        menu.setCustomisations(updateMenu.getCustomisations());
+                        menu.setOpeningTime(updateMenu.getOpeningTime());
+                        menu.setClosingTime(updateMenu.getClosingTime());
+                        menuRepo.save(menu);
+                        return new ResponseEntity<>(new ResponseDTO("success",null,menu),HttpStatus.OK);
+                    }else{
+                        return new ResponseEntity<>(new ResponseDTO("failure","Incorrect Selling price",null), HttpStatus.BAD_REQUEST);
+                    }
+                }else{
+                    return new ResponseEntity<>(new ResponseDTO("failure","Incorrect Tax value",null), HttpStatus.BAD_REQUEST);
+                }
+            }else{
+                return new ResponseEntity<>(new ResponseDTO("failure","Menu is not found",null), HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(new ResponseDTO("failure","Outlet is not found",null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @Override
+    public ResponseEntity<ResponseDTO> ActiveOutlet(Long outletId,Boolean status) {
+        Optional<Outlet> outletDetails = outletRepo.findById(outletId);
+        if(outletDetails.isPresent()){
+            Outlet outlet = outletDetails.get();
+            outlet.setActive(status);
+            outlet.setUpdatedAt(LocalDateTime.now().toString());
+            outletRepo.save(outlet);
+            return new ResponseEntity<>(new ResponseDTO<>("success"," Status updated",null),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO<>("failure","Outlet is not found",null),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> ActiveMenu(Long menuId,Boolean status) {
+        Optional<Menu> menuDetails = menuRepo.findById(menuId);
+        if(menuDetails.isPresent()){
+            Menu menu = menuDetails.get();
+            menu.setActive(status);
+            menu.setUpdatedAt(LocalDateTime.now().toString());
+            menuRepo.save(menu);
+            return new ResponseEntity<>(new ResponseDTO<>("success","Status updated",null),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO<>("failure","menu is not found",null),
+                HttpStatus.BAD_REQUEST);
     }
 }

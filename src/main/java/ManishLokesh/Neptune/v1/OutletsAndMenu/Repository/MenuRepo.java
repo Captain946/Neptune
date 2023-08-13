@@ -4,7 +4,12 @@ import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface MenuRepo extends JpaRepository<Menu, Long> {
-    public Menu saveAndFlush(Menu menu);
+    Menu saveAndFlush(Menu menu);
+    Optional<Menu> findById(Long outletId);
+    Menu findByOutletId(String outletId);
+
 }
