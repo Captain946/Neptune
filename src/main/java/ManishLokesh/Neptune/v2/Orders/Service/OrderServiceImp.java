@@ -12,7 +12,8 @@ public class OrderServiceImp implements OrderService{
     @Override
     public ResponseEntity<ResponseDTO> addOrder(OrderRequestBody orderRequestBody) {
         return new ResponseEntity<>(
-                new ResponseDTO("success", null, "Order Created successfully"),
+                new ResponseDTO("success", null, orderRequestBody),
                 HttpStatus.CREATED);
     }
+
 }

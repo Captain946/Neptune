@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String trainName;
     private String trainNo;
@@ -18,7 +18,6 @@ public class Orders {
     private String deliveryDate;
     private String bookingDate;
     private String outletId;
-    private String menuId;
     private String customerId;
     private String createdAt;
     private String status;
@@ -110,14 +109,6 @@ public class Orders {
 
     public void setOutletId(String outletId) {
         this.outletId = outletId;
-    }
-
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
     }
 
     public String getCustomerId() {
