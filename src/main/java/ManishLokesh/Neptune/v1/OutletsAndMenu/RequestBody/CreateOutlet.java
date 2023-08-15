@@ -19,7 +19,6 @@ public class CreateOutlet {
     private String fssaiValidUpto;
     private String outletClosedFrom;
     private String outletClosedTo;
-    private Boolean active;
     private String logoImage;
     private String emailId;
     private String mobileNo;
@@ -28,7 +27,7 @@ public class CreateOutlet {
     public CreateOutlet(String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
                         String closingTime, Integer deliveryCost, String address, String city, String state,
                         Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
-                        String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
+                        String fssaiValidUpto, String outletClosedFrom, String outletClosedTo,
                         String logoImage, String emailId, String mobileNo, String stationCode){
         this.outletName = outletName;
         this.minOrderValue = minOrderValue;
@@ -47,7 +46,6 @@ public class CreateOutlet {
         this.fssaiValidUpto = fssaiValidUpto;
         this.outletClosedFrom = outletClosedFrom;
         this.outletClosedTo = outletClosedTo;
-        this.active = active;
         this.logoImage = logoImage;
         this.emailId = emailId;
         this.mobileNo = mobileNo;
@@ -201,14 +199,6 @@ public class CreateOutlet {
 
     public void setOutletClosedTo(String outletClosedTo) {
         this.outletClosedTo = outletClosedTo;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public String getLogoImage() {

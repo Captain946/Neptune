@@ -1,13 +1,15 @@
 package ManishLokesh.Neptune.v2.Orders.Entity;
 
 
+import org.hibernate.type.FloatType;
+
 import javax.persistence.*;
 
 @Entity
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String trainName;
     private String trainNo;
@@ -24,11 +26,11 @@ public class Orders {
     private String createdBy;
     private String pnr;
     private String paymentType;
-    private String deliveryCharge;
+    private Float deliveryCharge;
     private String orderFrom;
-    private String totalAmount;
-    private String gst;
-    private String payable_amount;
+    private Float totalAmount;
+    private Float gst;
+    private Float payable_amount;
 
 
     public Long getId() {
@@ -159,11 +161,11 @@ public class Orders {
         this.paymentType = paymentType;
     }
 
-    public String getDeliveryCharge() {
+    public Float getDeliveryCharge() {
         return deliveryCharge;
     }
 
-    public void setDeliveryCharge(String deliveryCharge) {
+    public void setDeliveryCharge(Float deliveryCharge) {
         this.deliveryCharge = deliveryCharge;
     }
 
@@ -175,27 +177,27 @@ public class Orders {
         this.orderFrom = orderFrom;
     }
 
-    public String getTotalAmount() {
+    public Float getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(String totalAmount) {
+    public void setTotalAmount(Float totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public String getGst() {
+    public Float getGst() {
         return gst;
     }
 
-    public void setGst(String gst) {
+    public void setGst(Float gst) {
         this.gst = gst;
     }
 
-    public String getPayable_amount() {
+    public Float getPayable_amount() {
         return payable_amount;
     }
 
-    public void setPayable_amount(String payable_amount) {
+    public void setPayable_amount(Float payable_amount) {
         this.payable_amount = payable_amount;
     }
 }

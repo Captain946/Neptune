@@ -59,7 +59,7 @@ public class OutletServiceImp implements OutletService{
         outlet.setFssaiValidUpto(createOutlet.getFssaiValidUpto());
         outlet.setOutletClosedFrom(createOutlet.getOutletClosedFrom());
         outlet.setOutletClosedTo(createOutlet.getOutletClosedTo());
-        outlet.setActive(createOutlet.getActive());
+        outlet.setActive(false);
         outlet.setLogoImage(createOutlet.getLogoImage());
         outlet.setEmailId(createOutlet.getEmailId());
         outlet.setMobileNo(createOutlet.getMobileNo());

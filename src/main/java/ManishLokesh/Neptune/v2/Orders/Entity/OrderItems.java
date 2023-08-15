@@ -11,11 +11,11 @@ public class OrderItems {
     private Long id;
     private Long orderId;
     private Integer quantity;
-    private Double basePrice;
+    private Float basePrice;
     private String itemName;
     private Long itemId;
     private String description;
-    private Double tax;
+    private Float tax;
     private String createdAt;
 
 
@@ -43,11 +43,11 @@ public class OrderItems {
         this.quantity = quantity;
     }
 
-    public Double getBasePrice() {
+    public Float getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(Double basePrice) {
+    public void setBasePrice(Float basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -75,11 +75,11 @@ public class OrderItems {
         this.description = description;
     }
 
-    public Double getTax() {
+    public Float getTax() {
         return tax;
     }
 
-    public void setTax(Double tax) {
+    public void setTax(Float tax) {
         this.tax = tax;
     }
 

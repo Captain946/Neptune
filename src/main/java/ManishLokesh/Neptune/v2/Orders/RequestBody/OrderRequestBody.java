@@ -1,5 +1,7 @@
 package ManishLokesh.Neptune.v2.Orders.RequestBody;
 
+import org.hibernate.type.FloatType;
+
 import java.util.List;
 
 public class OrderRequestBody {
@@ -14,7 +16,7 @@ public class OrderRequestBody {
     private String customerId;
     private String pnr;
     private String paymentType;
-    private String deliveryCharge;
+    private Float deliveryCharge;
     private String orderFrom;
     private List<OrderItemRequest> orderItem;
 
@@ -106,11 +108,11 @@ public class OrderRequestBody {
         this.paymentType = paymentType;
     }
 
-    public String getDeliveryCharge() {
+    public Float getDeliveryCharge() {
         return deliveryCharge;
     }
 
-    public void setDeliveryCharge(String deliveryCharge) {
+    public void setDeliveryCharge(Float deliveryCharge) {
         this.deliveryCharge = deliveryCharge;
     }
 
