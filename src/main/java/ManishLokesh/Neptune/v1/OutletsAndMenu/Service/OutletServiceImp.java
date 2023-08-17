@@ -2,13 +2,19 @@ package ManishLokesh.Neptune.v1.OutletsAndMenu.Service;
 
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Outlet;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.OutletClosing;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.CreateOutletResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.MenuResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.MenuRepo;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.OutletClosingRepo;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.OutletRepo;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateMenu;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateOutlet;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.OutletClosingRequest;
+import ManishLokesh.Neptune.v2.Orders.RequestBody.OrderItemRequest;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +23,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
+import java.lang.management.GarbageCollectorMXBean;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.Long.valueOf;
 
@@ -30,9 +41,11 @@ public class OutletServiceImp implements OutletService{
     @Autowired
     public OutletRepo outletRepo;
     @Autowired
+    public ObjectMapper objectMapper;
+    @Autowired
     public MenuRepo menuRepo;
-
-
+    @Autowired
+    public OutletClosingRepo outletClosingRepo;
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewOutlet(CreateOutlet createOutlet) {
@@ -57,22 +70,31 @@ public class OutletServiceImp implements OutletService{
         outlet.setGstNo(createOutlet.getGstNo());
         outlet.setFssaiNo(createOutlet.getFssaiNo());
         outlet.setFssaiValidUpto(createOutlet.getFssaiValidUpto());
-        outlet.setOutletClosedFrom(createOutlet.getOutletClosedFrom());
-        outlet.setOutletClosedTo(createOutlet.getOutletClosedTo());
         outlet.setActive(false);
         outlet.setLogoImage(createOutlet.getLogoImage());
         outlet.setEmailId(createOutlet.getEmailId());
         outlet.setMobileNo(createOutlet.getMobileNo());
         outlet.setRatingValue(3.3);
+        String aggOutletId = String.valueOf((int) (Math.random() * 90000) + 10000);
+        outlet.setIrctcOutletId(aggOutletId);
         outlet.setCreatedAt(LocalDateTime.now().toString());
         Outlet o = outletRepo.saveAndFlush(outlet);
+        List<OutletClosingRequest> ClosingRequestList = objectMapper.convertValue(createOutlet.getOutletClosing(), new TypeReference<>() {});
+        List<OutletClosing> outletClosingList = new ArrayList<>();
+        for(OutletClosingRequest closing : ClosingRequestList){
+            OutletClosing outletClosing = new OutletClosing();
+            outletClosing.setClosedFrom(closing.getClosingFrom());
+            outletClosing.setClosedTo(closing.getClosingTo());
+            outletClosing.setOutletId(o.getId());
+            outletClosingList.add(outletClosing);
+        }
+       List <OutletClosing> storeClose = outletClosingRepo.saveAllAndFlush(outletClosingList);
 
         CreateOutletResponse createOutletResponse = new CreateOutletResponse(o.getId(),o.getOutletName(),
                 o.getMinOrderValue(),o.getOrderTiming(),o.getOpeningTime(),o.getClosingTime(),
                 o.getDeliveryCost(),o.getAddress(),o.getCity(),o.getState(),o.getPrepaid(),o.getCompanyName(),
-                o.getPanCard(),o.getGstNo(),o.getFssaiNo(),o.getFssaiValidUpto(),o.getOutletClosedFrom(),
-                o.getOutletClosedTo(),
-                o.getActive(),o.getCreatedAt(),o.getUpdatedAt(),o.getLogoImage(),o.getEmailId(),
+                o.getPanCard(),o.getGstNo(),o.getFssaiNo(),o.getFssaiValidUpto(),
+                o.getActive(),o.getCreatedAt(),storeClose,o.getUpdatedAt(),o.getLogoImage(),o.getEmailId(),
                 o.getMobileNo(),o.getStationCode());
 
         return new ResponseEntity<>(new ResponseDTO("success",null,createOutletResponse),
@@ -101,8 +123,6 @@ public class OutletServiceImp implements OutletService{
             outlet.setGstNo(updateOutlet.getGstNo());
             outlet.setFssaiNo(updateOutlet.getFssaiNo());
             outlet.setFssaiValidUpto(updateOutlet.getFssaiValidUpto());
-            outlet.setOutletClosedTo(updateOutlet.getOutletClosedTo());
-            outlet.setOutletClosedFrom(updateOutlet.getOutletClosedFrom());
             outlet.setLogoImage(updateOutlet.getLogoImage());
             outlet.setEmailId(updateOutlet.getEmailId());
             outlet.setMobileNo(updateOutlet.getMobileNo());

@@ -1,5 +1,9 @@
 package ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody;
 
+import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.OutletClosing;
+
+import java.util.List;
+
 public class CreateOutletResponse <T>{
 
     private Long id;
@@ -18,10 +22,9 @@ public class CreateOutletResponse <T>{
     private String gstNo;
     private String fssaiNo;
     private String fssaiValidUpto;
-    private String outletClosedFrom;
-    private String outletClosedTo;
     private Boolean active;
     private String createdAt;
+    private Object outletClosing;
     private String updatedAt;
     private String logoImage;
     private String emailId;
@@ -29,13 +32,12 @@ public class CreateOutletResponse <T>{
     private String stationCode;
 
 
-
-
     public CreateOutletResponse(Long id, String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
                                 String closingTime, Integer deliveryCost, String address, String city, String state,
                                 Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
-                                String fssaiValidUpto, String outletClosedFrom, String outletClosedTo, Boolean active,
-                                String createdAt, String updatedAt, String logoImage, String emailId, String mobileNo, String stationCode){
+                                String fssaiValidUpto, Boolean active,String createdAt, Object outletClosing ,
+                                String updatedAt, String logoImage, String emailId, String mobileNo,
+                                String stationCode){
         this.id = id;
         this.outletName = outletName;
         this.minOrderValue = minOrderValue;
@@ -52,10 +54,9 @@ public class CreateOutletResponse <T>{
         this.gstNo = gstNo;
         this.fssaiNo = fssaiNo;
         this.fssaiValidUpto = fssaiValidUpto;
-        this.outletClosedFrom = outletClosedFrom;
-        this.outletClosedTo = outletClosedTo;
         this.active = active;
         this.createdAt = createdAt;
+        this.outletClosing = outletClosing;
         this.updatedAt = updatedAt;
         this.logoImage = logoImage;
         this.emailId = emailId;
@@ -106,6 +107,13 @@ public class CreateOutletResponse <T>{
 
     public void setOpeningTime(String openingTime) {
         this.openingTime = openingTime;
+    }
+    public Object getOutletClosing() {
+        return outletClosing;
+    }
+
+    public void setOutletClosing(Object outletClosing) {
+        this.outletClosing = outletClosing;
     }
 
     public String getClosingTime() {
@@ -194,22 +202,6 @@ public class CreateOutletResponse <T>{
 
     public void setFssaiValidUpto(String fssaiValidUpto) {
         this.fssaiValidUpto = fssaiValidUpto;
-    }
-
-    public String getOutletClosedFrom() {
-        return outletClosedFrom;
-    }
-
-    public void setOutletClosedFrom(String outletClosedFrom) {
-        this.outletClosedFrom = outletClosedFrom;
-    }
-
-    public String getOutletClosedTo() {
-        return outletClosedTo;
-    }
-
-    public void setOutletClosedTo(String outletClosedTo) {
-        this.outletClosedTo = outletClosedTo;
     }
 
     public Boolean getActive() {

@@ -1,0 +1,1 @@
+package ManishLokesh.Neptune.v1.OutletsAndMenu.Repository;import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.OutletClosing;import org.springframework.data.jpa.repository.JpaRepository;import org.springframework.stereotype.Repository;@Repositorypublic interface OutletClosingRepo extends JpaRepository<OutletClosing, Long> {}

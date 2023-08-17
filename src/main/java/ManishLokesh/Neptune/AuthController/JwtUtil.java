@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-
 public class JwtUtil {
 
     private static final String SECRET_KEY = "LOHARMANISH201";

@@ -1,5 +1,7 @@
 package ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody;
 
+import java.util.List;
+
 public class CreateOutlet {
     private String stationCode;
     private String outletName;
@@ -17,45 +19,14 @@ public class CreateOutlet {
     private String gstNo;
     private String fssaiNo;
     private String fssaiValidUpto;
-    private String outletClosedFrom;
-    private String outletClosedTo;
+    private List<OutletClosingRequest> outletClosing;
     private String logoImage;
     private String emailId;
     private String mobileNo;
 
 
-    public CreateOutlet(String outletName, Long minOrderValue, Integer orderTiming, String openingTime,
-                        String closingTime, Integer deliveryCost, String address, String city, String state,
-                        Boolean prepaid, String companyName, String panCard, String gstNo, String fssaiNo,
-                        String fssaiValidUpto, String outletClosedFrom, String outletClosedTo,
-                        String logoImage, String emailId, String mobileNo, String stationCode){
-        this.outletName = outletName;
-        this.minOrderValue = minOrderValue;
-        this.orderTiming = orderTiming;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
-        this.deliveryCost = deliveryCost;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.prepaid = prepaid;
-        this.companyName = companyName;
-        this.panCard = panCard;
-        this.gstNo = gstNo;
-        this.fssaiNo = fssaiNo;
-        this.fssaiValidUpto = fssaiValidUpto;
-        this.outletClosedFrom = outletClosedFrom;
-        this.outletClosedTo = outletClosedTo;
-        this.logoImage = logoImage;
-        this.emailId = emailId;
-        this.mobileNo = mobileNo;
-        this.stationCode = stationCode;
-    }
-
     public CreateOutlet(){
-
     }
-
 
     public String getStationCode() {
         return stationCode;
@@ -185,20 +156,12 @@ public class CreateOutlet {
         this.fssaiValidUpto = fssaiValidUpto;
     }
 
-    public String getOutletClosedFrom() {
-        return outletClosedFrom;
+    public List getOutletClosing() {
+        return outletClosing;
     }
 
-    public void setOutletClosedFrom(String outletClosedFrom) {
-        this.outletClosedFrom = outletClosedFrom;
-    }
-
-    public String getOutletClosedTo() {
-        return outletClosedTo;
-    }
-
-    public void setOutletClosedTo(String outletClosedTo) {
-        this.outletClosedTo = outletClosedTo;
+    public void setOutletClosing(List outletClosing) {
+        this.outletClosing = outletClosing;
     }
 
     public String getLogoImage() {

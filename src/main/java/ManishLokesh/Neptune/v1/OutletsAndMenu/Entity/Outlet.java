@@ -25,8 +25,6 @@ public class Outlet {
     private String gstNo;
     private String fssaiNo;
     private String fssaiValidUpto;
-    private String outletClosedFrom;
-    private String outletClosedTo;
     private Boolean active;
     private String logoImage;
     private String emailId;
@@ -34,6 +32,15 @@ public class Outlet {
     private String stationCode;
     private Integer ratingCount;
     private Double ratingValue;
+    private String irctcOutletId;
+
+    public String getIrctcOutletId() {
+        return irctcOutletId;
+    }
+
+    public void setIrctcOutletId(String irctcOutletId) {
+        this.irctcOutletId = irctcOutletId;
+    }
 
     public Long getId() {
         return id;
@@ -177,22 +184,6 @@ public class Outlet {
 
     public void setFssaiValidUpto(String fssaiValidUpto) {
         this.fssaiValidUpto = fssaiValidUpto;
-    }
-
-    public String getOutletClosedFrom() {
-        return outletClosedFrom;
-    }
-
-    public void setOutletClosedFrom(String outletClosedFrom) {
-        this.outletClosedFrom = outletClosedFrom;
-    }
-
-    public String getOutletClosedTo() {
-        return outletClosedTo;
-    }
-
-    public void setOutletClosedTo(String outletClosedTo) {
-        this.outletClosedTo = outletClosedTo;
     }
 
     public Boolean getActive() {
