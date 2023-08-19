@@ -3,6 +3,9 @@ package ManishLokesh.Neptune.v1.OutletsAndMenu.Service;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Outlet;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.OutletClosing;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.Outlet_Push;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.OutletsPushToIRCTC;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.outletPushRequestBody;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.CreateOutletResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.MenuResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.MenuRepo;
@@ -12,27 +15,26 @@ import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateMenu;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.CreateOutlet;
 import ManishLokesh.Neptune.ResponseDTO.ResponseDTO;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestBody.OutletClosingRequest;
-import ManishLokesh.Neptune.v2.Orders.RequestBody.OrderItemRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import javax.xml.crypto.Data;
-import java.lang.management.GarbageCollectorMXBean;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static java.lang.Long.valueOf;
+import static java.util.concurrent.CompletableFuture.runAsync;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service 
 public class OutletServiceImp implements OutletService{
@@ -46,6 +48,18 @@ public class OutletServiceImp implements OutletService{
     public MenuRepo menuRepo;
     @Autowired
     public OutletClosingRepo outletClosingRepo;
+    public Outlet_Push outletPush = new Outlet_Push();
+    private RestTemplate restTemplate;
+    private String EcateUrl;
+    private String AuthToken;
+
+    @Autowired
+    public OutletServiceImp(RestTemplate restTemplate, @Value("${E-catering.stage.url}") String ecateUrl,
+                            @Value("${E-catering.auth.token}") String authToken){
+        this.restTemplate = restTemplate;
+        this.EcateUrl = ecateUrl;
+        this.AuthToken = authToken;
+    }
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewOutlet(CreateOutlet createOutlet) {
@@ -85,7 +99,7 @@ public class OutletServiceImp implements OutletService{
             OutletClosing outletClosing = new OutletClosing();
             outletClosing.setClosedFrom(closing.getClosingFrom());
             outletClosing.setClosedTo(closing.getClosingTo());
-            outletClosing.setOutletId(o.getId());
+            outletClosing.setOutletId(String.valueOf(o.getId()));
             outletClosingList.add(outletClosing);
         }
        List <OutletClosing> storeClose = outletClosingRepo.saveAllAndFlush(outletClosingList);
@@ -100,6 +114,7 @@ public class OutletServiceImp implements OutletService{
         return new ResponseEntity<>(new ResponseDTO("success",null,createOutletResponse),
                 HttpStatus.CREATED);
     }
+
 
     @Override
     public ResponseEntity<ResponseDTO> UpdateOutlet(CreateOutlet updateOutlet,Long outletId) {
@@ -126,8 +141,69 @@ public class OutletServiceImp implements OutletService{
             outlet.setLogoImage(updateOutlet.getLogoImage());
             outlet.setEmailId(updateOutlet.getEmailId());
             outlet.setMobileNo(updateOutlet.getMobileNo());
-            outletRepo.save(outlet);
-            return new ResponseEntity<>(new ResponseDTO<>("success",null,outlet),
+            Outlet o = outletRepo.save(outlet);
+
+            outletClosingRepo.deleteByOutletId(String.valueOf(outletId));
+            List<OutletClosingRequest> closingRequestList = objectMapper.convertValue(updateOutlet.getOutletClosing(), new TypeReference<>() {});
+            List<OutletClosing> closingList = new ArrayList<>();
+                for(OutletClosingRequest closingRequest : closingRequestList){
+                    OutletClosing closing = new OutletClosing();
+                    closing.setClosedFrom(closingRequest.getClosingFrom());
+                    closing.setClosedTo(closingRequest.getClosingTo());
+                    closing.setOutletId( String.valueOf(o.getId()));
+                    closingList.add(closing);
+                }
+            List<OutletClosing> savedClosing =  outletClosingRepo.saveAllAndFlush(closingList);
+
+            CreateOutletResponse updateOutletResponse = new CreateOutletResponse(o.getId(),o.getOutletName(),
+                    o.getMinOrderValue(),o.getOrderTiming(),o.getOpeningTime(),o.getClosingTime(),
+                    o.getDeliveryCost(),o.getAddress(),o.getCity(),o.getState(),o.getPrepaid(),o.getCompanyName(),
+                    o.getPanCard(),o.getGstNo(),o.getFssaiNo(),o.getFssaiValidUpto(),
+                    o.getActive(),o.getCreatedAt(),savedClosing,o.getUpdatedAt(),o.getLogoImage(),o.getEmailId(),
+                    o.getMobileNo(),o.getStationCode());
+
+            List<Outlet> allTheOutlet = outletRepo.findByStationCode(o.getStationCode());
+            List<Outlet> activeOutletList = allTheOutlet.stream().filter(Outlet :: getActive).collect(Collectors.toList());
+
+            List<outletPushRequestBody> pushOutlet = new ArrayList<>();
+            for(Outlet outlet1 : activeOutletList){
+                outletPushRequestBody outlet2 = new outletPushRequestBody();
+                outlet2.setOutletId(outlet1.getIrctcOutletId());
+                outlet2.setOutletName(outlet1.getOutletName());
+                outlet2.setOrder_timing(outlet1.getOrderTiming());
+                outlet2.setMinOrderAmount(outlet1.getMinOrderValue());
+                outlet2.setOpeningTime(outlet1.getOpeningTime());
+                outlet2.setClosingTime(outlet1.getClosingTime());
+                outlet2.setDeliveryCost(outlet1.getDeliveryCost());
+                outlet2.setPrepaid(outlet1.getPrepaid());
+                outlet2.setAddress(outlet1.getAddress());
+                outlet2.setCity(outlet1.getCity());
+                outlet2.setState(outlet1.getState());
+                outlet2.setCompanyName(outlet1.getCompanyName());
+                outlet2.setVendorPanNumber(outlet1.getPanCard());
+                outlet2.setGstNo(outlet1.getGstNo());
+                outlet2.setFssaiNo(outlet1.getFssaiNo());
+                outlet2.setFssaiValidUpto(outlet1.getFssaiValidUpto());
+                outlet2.setLogoImage(outlet1.getLogoImage());
+                outlet2.setMobileNumber(outlet1.getMobileNo());
+                outlet2.setEmailId(outlet1.getEmailId());
+                pushOutlet.add(outlet2);
+            }
+            OutletsPushToIRCTC outletsPushToIRCTC = new OutletsPushToIRCTC(pushOutlet);
+            logger.info("testing : {}",pushOutlet);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpHeaders.add("Authorization",AuthToken);
+            String stationCode = o.getStationCode();
+            Object response = this.restTemplate.exchange(
+                    EcateUrl+"api/v1/vendor/aggregator/outlets/"+stationCode,
+                    HttpMethod.POST,
+                    new HttpEntity<>(outletsPushToIRCTC,httpHeaders),
+                    Object.class
+            ).getBody();
+            logger.info("testing : {}",response);
+
+            return new ResponseEntity<>(new ResponseDTO<>("success",null,updateOutletResponse),
                     HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDTO<>("failure","outlet is not found",null),
@@ -137,6 +213,7 @@ public class OutletServiceImp implements OutletService{
 
     @Override
     public ResponseEntity<ResponseDTO> CreateNewMenu(Long outletId,CreateMenu createMenu) {
+        Optional<Outlet> outletDetails = outletRepo.findById(outletId);
         if(outletRepo.findById(outletId).isPresent()){
             if(((Float.parseFloat(createMenu.getBasePrice())) * 0.05) == Float.parseFloat(createMenu.getTax())){
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
@@ -157,8 +234,9 @@ public class OutletServiceImp implements OutletService{
                     menu.setBulkOnly(createMenu.getBulkOnly());
                     menu.setIsVegeterian(createMenu.getIsVegeterian());
                     menu.setCustomisations(createMenu.getCustomisations());
-                    menu.setOpeningTime(createMenu.getOpeningTime());
-                    menu.setClosingTime(createMenu.getClosingTime());
+                    Outlet outlet = outletDetails.get();
+                    menu.setOpeningTime(outlet.getOpeningTime());
+                    menu.setClosingTime(outlet.getClosingTime());
                     Menu m = menuRepo.saveAndFlush(menu);
 
                     MenuResponse menuResponse = new MenuResponse(m.getId(), m.getName(), m.getDescription(),
@@ -201,8 +279,9 @@ public class OutletServiceImp implements OutletService{
                         menu.setBulkOnly(updateMenu.getBulkOnly());
                         menu.setIsVegeterian(updateMenu.getIsVegeterian());
                         menu.setCustomisations(updateMenu.getCustomisations());
-                        menu.setOpeningTime(updateMenu.getOpeningTime());
-                        menu.setClosingTime(updateMenu.getClosingTime());
+                        Outlet outlet = outletDetails.get();
+                        menu.setOpeningTime(outlet.getOpeningTime());
+                        menu.setClosingTime(outlet.getClosingTime());
                         menuRepo.save(menu);
                         return new ResponseEntity<>(new ResponseDTO("success",null,menu),HttpStatus.OK);
                     }else{
@@ -227,8 +306,50 @@ public class OutletServiceImp implements OutletService{
             Outlet outlet = outletDetails.get();
             outlet.setActive(status);
             outlet.setUpdatedAt(LocalDateTime.now().toString());
-            outletRepo.save(outlet);
-            return new ResponseEntity<>(new ResponseDTO<>("success"," Status updated",null),
+            Outlet o = outletRepo.save(outlet);
+
+            List<Outlet> allTheOutlet = outletRepo.findByStationCode(o.getStationCode());
+            List<Outlet> activeOutletList = allTheOutlet.stream().filter(Outlet :: getActive).collect(Collectors.toList());
+
+            List<outletPushRequestBody> pushOutlet = new ArrayList<>();
+            for(Outlet outlet1 : activeOutletList){
+                outletPushRequestBody outlet2 = new outletPushRequestBody();
+                outlet2.setOutletId(outlet1.getIrctcOutletId());
+                outlet2.setOutletName(outlet1.getOutletName());
+                outlet2.setOrder_timing(outlet1.getOrderTiming());
+                outlet2.setMinOrderAmount(outlet1.getMinOrderValue());
+                outlet2.setOpeningTime(outlet1.getOpeningTime());
+                outlet2.setClosingTime(outlet1.getClosingTime());
+                outlet2.setDeliveryCost(outlet1.getDeliveryCost());
+                outlet2.setPrepaid(outlet1.getPrepaid());
+                outlet2.setAddress(outlet1.getAddress());
+                outlet2.setCity(outlet1.getCity());
+                outlet2.setState(outlet1.getState());
+                outlet2.setCompanyName(outlet1.getCompanyName());
+                outlet2.setVendorPanNumber(outlet1.getPanCard());
+                outlet2.setGstNo(outlet1.getGstNo());
+                outlet2.setFssaiNo(outlet1.getFssaiNo());
+                outlet2.setFssaiValidUpto(outlet1.getFssaiValidUpto());
+                outlet2.setLogoImage(outlet1.getLogoImage());
+                outlet2.setMobileNumber(outlet1.getMobileNo());
+                outlet2.setEmailId(outlet1.getEmailId());
+                pushOutlet.add(outlet2);
+            }
+            OutletsPushToIRCTC outletsPushToIRCTC = new OutletsPushToIRCTC(pushOutlet);
+            logger.info("testing : {}",pushOutlet);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpHeaders.add("Authorization",AuthToken);
+            String stationCode = o.getStationCode();
+            Object response = this.restTemplate.exchange(
+                    EcateUrl+"api/v1/vendor/aggregator/outlets/"+stationCode,
+                    HttpMethod.POST,
+                    new HttpEntity<>(outletsPushToIRCTC,httpHeaders),
+                    Object.class
+            ).getBody();
+            logger.info("testing : {}",response);
+
+            return new ResponseEntity<>(new ResponseDTO<>("success","",o),
                     HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDTO<>("failure","Outlet is not found",null),

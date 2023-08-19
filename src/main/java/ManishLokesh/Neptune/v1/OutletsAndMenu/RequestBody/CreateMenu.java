@@ -13,13 +13,11 @@ public class CreateMenu {
     private Boolean isVegeterian;
     private String image;
     private String customisations;
-    private String openingTime;
-    private String closingTime;
 
 
     public CreateMenu(String name,String description, String basePrice,String tax,
                       String sellingPrice,String foodType,String cuisine, String tags, Boolean bulkOnly,
-                      Boolean isVegeterian, String image, String customisations,String openingTime,String closingTime){
+                      Boolean isVegeterian, String image, String customisations){
         this.name = name;
         this.description = description;
         this.basePrice = basePrice;
@@ -32,8 +30,6 @@ public class CreateMenu {
         this.isVegeterian = isVegeterian;
         this.image = image;
         this.customisations = customisations;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
     }
 
     public String getName() {
@@ -132,19 +128,4 @@ public class CreateMenu {
         this.customisations = customisations;
     }
 
-    public String getOpeningTime() {
-        return openingTime;
-    }
-
-    public void setOpeningTime(String openingTime) {
-        this.openingTime = openingTime;
-    }
-
-    public String getClosingTime() {
-        return closingTime;
-    }
-
-    public void setClosingTime(String closingTime) {
-        this.closingTime = closingTime;
-    }
 }

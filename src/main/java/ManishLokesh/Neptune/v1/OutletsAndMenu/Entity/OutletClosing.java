@@ -10,7 +10,7 @@ public class OutletClosing {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Long outletId;
+    private String outletId;
     private String closedFrom;
     private String closedTo;
 
@@ -22,11 +22,11 @@ public class OutletClosing {
         this.id = id;
     }
 
-    public Long getOutletId() {
+    public String getOutletId() {
         return outletId;
     }
 
-    public void setOutletId(Long outletId) {
+    public void setOutletId(String outletId) {
         this.outletId = outletId;
     }
 
