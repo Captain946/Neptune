@@ -3,9 +3,10 @@ package ManishLokesh.Neptune.v1.OutletsAndMenu.Service;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Menu;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.Outlet;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Entity.OutletClosing;
-import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.Outlet_Push;
-import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.OutletsPushToIRCTC;
-import ManishLokesh.Neptune.v1.OutletsAndMenu.PushToIRCTC.outletPushRequestBody;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestOfIRCTCPush.MenuPushRequestBody;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestOfIRCTCPush.MenuPushToIRCTC;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestOfIRCTCPush.OutletsPushToIRCTC;
+import ManishLokesh.Neptune.v1.OutletsAndMenu.RequestOfIRCTCPush.outletPushRequestBody;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.CreateOutletResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.ReponseBody.MenuResponse;
 import ManishLokesh.Neptune.v1.OutletsAndMenu.Repository.MenuRepo;
@@ -30,11 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import static java.util.concurrent.CompletableFuture.runAsync;
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service 
 public class OutletServiceImp implements OutletService{
@@ -48,10 +45,9 @@ public class OutletServiceImp implements OutletService{
     public MenuRepo menuRepo;
     @Autowired
     public OutletClosingRepo outletClosingRepo;
-    public Outlet_Push outletPush = new Outlet_Push();
     private RestTemplate restTemplate;
-    private String EcateUrl;
-    private String AuthToken;
+    private final String EcateUrl;
+    private final String AuthToken;
 
     @Autowired
     public OutletServiceImp(RestTemplate restTemplate, @Value("${E-catering.stage.url}") String ecateUrl,
@@ -219,6 +215,8 @@ public class OutletServiceImp implements OutletService{
                 if(((Float.parseFloat(createMenu.getBasePrice()) + Float.parseFloat(createMenu.getTax()))
                         == Float.parseFloat(createMenu.getSellingPrice()))){
                     Menu menu = new Menu();
+                    String aggMenuId = String.valueOf((int) (Math.random() * 90000) + 10000);
+                    menu.setIrctcMenuId(aggMenuId);
                     menu.setCreatedAt(LocalDateTime.now().toString());
                     menu.setActive(false);
                     menu.setOutletId(outletId.toString());
@@ -282,7 +280,49 @@ public class OutletServiceImp implements OutletService{
                         Outlet outlet = outletDetails.get();
                         menu.setOpeningTime(outlet.getOpeningTime());
                         menu.setClosingTime(outlet.getClosingTime());
-                        menuRepo.save(menu);
+                        Menu m = menuRepo.save(menu);
+
+                        Long outletId2 = Long.parseLong(m.getOutletId());
+                        Optional<Outlet> outlet1 = outletRepo.findById(outletId2);
+                        Outlet o = outlet1.get();
+                        String stationCode = o.getStationCode();
+                        String irctcOutletId = o.getIrctcOutletId();
+
+                        List<Menu> menuList = menuRepo.findByOutletId(m.getOutletId());
+                        List<Menu> activeMenuList = menuList.stream().filter(Menu :: getActive).collect(Collectors.toList());
+                        List<MenuPushRequestBody> menuPushList = new ArrayList<>();
+                        for(Menu menu1 : activeMenuList){
+                            MenuPushRequestBody pushData = new MenuPushRequestBody();
+                            pushData.setItemId(menu1.getIrctcMenuId());
+                            pushData.setItemName(menu1.getName());
+                            pushData.setBasePrice(menu1.getBasePrice());
+                            pushData.setDescription(menu1.getDescription());
+                            pushData.setOpeningTime(menu1.getOpeningTime());
+                            pushData.setClosingTime(menu1.getClosingTime());
+                            pushData.setTax(menu1.getTax());
+                            pushData.setSellingPrice(menu1.getSellingPrice());
+                            pushData.setIsVegeterian(menu1.getIsVegeterian());
+                            pushData.setTags(null);
+                            pushData.setImage(menu1.getImage());
+                            pushData.setCuisine(menu1.getCuisine());
+                            pushData.setFoodType(menu1.getFoodType());
+                            pushData.setBulkOnly(menu1.getBulkOnly());
+                            pushData.setCustomisations(null);
+                            menuPushList.add(pushData);
+                        }
+                        MenuPushToIRCTC menuPushToIRCTC = new MenuPushToIRCTC(menuPushList);
+
+                        HttpHeaders httpHeaders = new HttpHeaders();
+                        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                        httpHeaders.add("Authorization",AuthToken);
+                        Object response = this.restTemplate.exchange(
+                                EcateUrl+"api/v1/vendor/aggregator/station/"+stationCode+"/"+"outlet" +"/"+irctcOutletId,
+                                HttpMethod.POST,
+                                new HttpEntity<>(menuPushToIRCTC,httpHeaders),
+                                Object.class
+                        ).getBody();
+
+                        logger.info("push data : {}",response);
                         return new ResponseEntity<>(new ResponseDTO("success",null,menu),HttpStatus.OK);
                     }else{
                         return new ResponseEntity<>(new ResponseDTO("failure","Incorrect Selling price",null), HttpStatus.BAD_REQUEST);
@@ -349,7 +389,7 @@ public class OutletServiceImp implements OutletService{
             ).getBody();
             logger.info("testing : {}",response);
 
-            return new ResponseEntity<>(new ResponseDTO<>("success","",o),
+            return new ResponseEntity<>(new ResponseDTO<>("success",null,"Outlet status is Updated Successfully"),
                     HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDTO<>("failure","Outlet is not found",null),
@@ -363,8 +403,50 @@ public class OutletServiceImp implements OutletService{
             Menu menu = menuDetails.get();
             menu.setActive(status);
             menu.setUpdatedAt(LocalDateTime.now().toString());
-            menuRepo.save(menu);
-            return new ResponseEntity<>(new ResponseDTO<>("success","Status updated",null),
+            Menu m = menuRepo.save(menu);
+
+            Long outletId = Long.parseLong(m.getOutletId());
+            Optional<Outlet> outlet = outletRepo.findById(outletId);
+            Outlet o = outlet.get();
+            String stationCode = o.getStationCode();
+            String irctcOutletId = o.getIrctcOutletId();
+
+            List<Menu> menuList = menuRepo.findByOutletId(m.getOutletId());
+            List<Menu> activeMenuList = menuList.stream().filter(Menu :: getActive).collect(Collectors.toList());
+            List<MenuPushRequestBody> menuPushList = new ArrayList<>();
+            for(Menu menu1 : activeMenuList){
+                MenuPushRequestBody pushData = new MenuPushRequestBody();
+                pushData.setItemId(menu1.getIrctcMenuId());
+                pushData.setItemName(menu1.getName());
+                pushData.setBasePrice(menu1.getBasePrice());
+                pushData.setDescription(menu1.getDescription());
+                pushData.setOpeningTime(menu1.getOpeningTime());
+                pushData.setClosingTime(menu1.getClosingTime());
+                pushData.setTax(menu1.getTax());
+                pushData.setSellingPrice(menu1.getSellingPrice());
+                pushData.setIsVegeterian(menu1.getIsVegeterian());
+                pushData.setTags(null);
+                pushData.setImage(menu1.getImage());
+                pushData.setCuisine(menu1.getCuisine());
+                pushData.setFoodType(menu1.getFoodType());
+                pushData.setBulkOnly(menu1.getBulkOnly());
+                pushData.setCustomisations(null);
+                menuPushList.add(pushData);
+            }
+            MenuPushToIRCTC menuPushToIRCTC = new MenuPushToIRCTC(menuPushList);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            httpHeaders.add("Authorization",AuthToken);
+            Object response = this.restTemplate.exchange(
+                    EcateUrl+"api/v1/vendor/aggregator/station/"+stationCode+"/"+"outlet" +"/"+irctcOutletId,
+                    HttpMethod.POST,
+                    new HttpEntity<>(menuPushToIRCTC,httpHeaders),
+                    Object.class
+            ).getBody();
+
+            logger.info("push data : {}",response);
+            return new ResponseEntity<>(new ResponseDTO<>("success",null,"Menu status is updated successfully"),
                     HttpStatus.OK);
         }
         return new ResponseEntity<>(new ResponseDTO<>("failure","menu is not found",null),

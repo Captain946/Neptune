@@ -25,6 +25,7 @@ public class Menu {
     private String createdAt;
     private String updatedAt;
     private Boolean active;
+    private String irctcMenuId;
 
 
     public Long getId() {
@@ -177,6 +178,14 @@ public class Menu {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getIrctcMenuId() {
+        return irctcMenuId;
+    }
+
+    public void setIrctcMenuId(String irctcMenuId) {
+        this.irctcMenuId = irctcMenuId;
     }
 }
 
