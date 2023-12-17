@@ -4,6 +4,10 @@ import ManishLokesh.Neptune.v1.Users.RequestBody.LoginRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.OtpValidateRequestBody;
 import ManishLokesh.Neptune.v1.Users.RequestBody.SignupRequestBody;
 import ManishLokesh.Neptune.v1.Users.Service.SignupService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +21,13 @@ public class UserController {
     @Autowired
     private SignupService service;
 
+    private Logger logger = LoggerFactory.getLogger("user.service.v1");
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @PostMapping("/api/v1/signup")
     public ResponseEntity<ResponseDTO> newUserSignup(@RequestBody SignupRequestBody SignRequestBody){
+        logger.info("{}",SignRequestBody.getMobileNumber());
         return this.service.signup(SignRequestBody);
     }
 

@@ -1,8 +1,5 @@
 package ManishLokesh.Neptune.v2.Orders.ResponseBody;
 
-import ManishLokesh.Neptune.v2.Orders.Entity.Orders;
-import org.hibernate.type.FloatType;
-
 public class OrderResponseBody {
     private Long id;
     private String trainName;
@@ -27,6 +24,9 @@ public class OrderResponseBody {
     private Float payable_amount;
     private Object orderItems;
 
+    public OrderResponseBody(){
+
+    }
 
     public OrderResponseBody(Long id,Float totalAmount, Float gst, Float deliveryCharge, Float payable_amount,String deliveryDate,String bookingDate,
                              String paymentType,String status,String customerId,String outletId,Object orderItems,String trainName, String trainNo,String stationCode,
@@ -111,8 +111,8 @@ public class OrderResponseBody {
         this.berth = berth;
     }
 
-    public String getDeliveryDate() {
-        return deliveryDate;
+    public String getDeliveryDate(String deliveryDate) {
+        return this.deliveryDate;
     }
 
     public void setDeliveryDate(String deliveryDate) {

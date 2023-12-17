@@ -52,7 +52,7 @@ public class CustomerServiceImp implements CustomerService {
                     login.setLastLogin(LocalDateTime.now().toString());
                     custLoginRepo.save(login);
 
-                    String token = jwtUtil.generateToken(login.getFullName());
+                    String token = jwtUtil.generateToken(login.getRole(),login.getId());
 
                     CustLoginResponseBody responseBody = new CustLoginResponseBody(login.getId(),
                             login.getFullName(),login.getCreatedAt(),loginRequestBody.getMobileNumber(),
@@ -150,7 +150,7 @@ public class CustomerServiceImp implements CustomerService {
                     String role = "CUSTOMER";
                     customerLogin.setRole(role);
                     Customer login1 = custLoginRepo.saveAndFlush(customerLogin);
-                    String token = jwtUtil.generateToken(login1.getFullName());
+                    String token = jwtUtil.generateToken(login1.getRole(), login1.getId());
                     CustOtpValidateResponseBody custOtpValidateResponseBody = new CustOtpValidateResponseBody(login1.getId(),
                             login1.getCreatedAt(),login1.getFullName(),login1.getEmailId(),login1.getMobileNumber(),login1.getGender(),
                             login1.getUpdatedAt(),token,role);

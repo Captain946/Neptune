@@ -9,7 +9,7 @@ public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private Long orderId;
+    private String orderId;
     private Integer quantity;
     private Float basePrice;
     private String itemName;
@@ -27,11 +27,11 @@ public class OrderItems {
         this.id = id;
     }
 
-    public Long getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(String  orderId) {
         this.orderId = orderId;
     }
 

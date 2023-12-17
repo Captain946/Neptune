@@ -6,6 +6,7 @@ public class SignupRequestBody {
 
     @NotNull(message = "fullName is not null")
     @NotBlank(message = "fullName is not blank")
+    @NotEmpty(message = "fullName is not empty")
     private String fullName;
 
     @NotNull(message = "mobile Number is not null")

@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Objects;
+
 
 @Service
 public class PNRServiceImp implements PNRservice{
@@ -21,7 +25,7 @@ public class PNRServiceImp implements PNRservice{
     private final String EcateUrl;
     private final String authToken;
     private final ObjectMapper objectMapper;
-    public Logger logger = LoggerFactory.getLogger("app.PNRservice");
+    public Logger logger = LoggerFactory.getLogger("app.v1.pnr.service");
 
     @Autowired
     public PNRServiceImp(RestTemplate restTemplate, @Value("${E-catering.stage.url}") String ecateUrl,
@@ -34,16 +38,20 @@ public class PNRServiceImp implements PNRservice{
 
     @Override
     public ResponseEntity<ResponseDTO> getPnrDetails(Long pnr) {
+        logger.info("requested pnr number :- {}",pnr);
+        ArrayList<String> response = new ArrayList<>();
         try{
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Authorization",authToken);
             ResponseEntity<String> responseEntity = this.restTemplate.exchange(
-                    EcateUrl+"api/v1/pnr/vendor?pnr="+pnr+"",
+                    EcateUrl+"api/v1/pnr/vendor?pnr="+pnr,
                     HttpMethod.GET,
                     new HttpEntity<>(httpHeaders),
                     String.class
             );
-            logger.info("status code is {}",responseEntity.getStatusCode());
+            response.add(responseEntity.getBody());
+            logger.info("response body get from IRCTC server {}",responseEntity.getBody());
+            logger.info("response code {}", responseEntity.getStatusCode());
             if(responseEntity.getStatusCode().is2xxSuccessful()){
                 String responseBody = responseEntity.getBody();
                 try {
@@ -57,8 +65,10 @@ public class PNRServiceImp implements PNRservice{
                 }
             }
         }catch (HttpClientErrorException e){
-            return new ResponseEntity<>(new ResponseDTO<>("faliure","IRCTC PNR api throwing error",null),
-                    HttpStatus.SERVICE_UNAVAILABLE);
+            logger.info("response :- {}",response);
+            return new ResponseEntity<>(new ResponseDTO<>("faliure","IRCTC PNR api throwing error",response),
+                    HttpStatus.BAD_REQUEST
+            );
         }
         return new ResponseEntity<>(new ResponseDTO<>("failure","Something went wrong",null),
                 HttpStatus.INTERNAL_SERVER_ERROR);

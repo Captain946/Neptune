@@ -9,6 +9,7 @@ import ManishLokesh.Neptune.v2.Orders.Repository.OrderItemsRepository;
 import ManishLokesh.Neptune.v2.Orders.Repository.OrderRepository;
 import ManishLokesh.Neptune.v2.Orders.RequestBody.OrderItemRequest;
 import ManishLokesh.Neptune.v2.Orders.RequestBody.OrderRequestBody;
+import ManishLokesh.Neptune.v2.Orders.RequestBody.OrderStatusBody;
 import ManishLokesh.Neptune.v2.Orders.ResponseBody.OrderResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,9 +82,10 @@ public class OrderServiceImp implements OrderService{
         orders.setPayable_amount((float) (subtotalPrice + (subtotalPrice*0.05) + orderRequestBody.getDeliveryCharge()));
         Orders saveOrder = orderRepository.saveAndFlush(orders);
         for(OrderItems orderItems : orderItemsList){
-            orderItems.setOrderId(saveOrder.getId());
+            orderItems.setOrderId(String.valueOf(saveOrder.getId()));
         }
         List<OrderItems> orderItems1 = orderItemsRepository.saveAllAndFlush(orderItemsList);
+
         OrderResponseBody orderResponseBody = new OrderResponseBody(saveOrder.getId(),saveOrder.getTotalAmount(),saveOrder.getGst(),saveOrder.getDeliveryCharge(),
                 saveOrder.getPayable_amount(),saveOrder.getDeliveryDate(),saveOrder.getBookingDate(),saveOrder.getPaymentType(),saveOrder.getStatus(),
                 saveOrder.getCustomerId(),saveOrder.getOutletId(),orderItems1,saveOrder.getTrainName(), saveOrder.getTrainNo(), saveOrder.getStationCode(), saveOrder.getStationName(),
@@ -91,5 +93,79 @@ public class OrderServiceImp implements OrderService{
         return new ResponseEntity<>(
                 new ResponseDTO("success", null, orderResponseBody),
                 HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> getOrder(Long orderId) {
+        Optional<Orders> orders = orderRepository.findById(orderId);
+        if(orders.isPresent()){
+            Orders saveOrder = orders.get();
+            List<OrderItems> orderItems1 = orderItemsRepository.findByOrderId(String.valueOf(orderId));
+            OrderResponseBody orderResponseBody = new OrderResponseBody(saveOrder.getId(),saveOrder.getTotalAmount(),saveOrder.getGst(),saveOrder.getDeliveryCharge(),
+                    saveOrder.getPayable_amount(),saveOrder.getDeliveryDate(),saveOrder.getBookingDate(),saveOrder.getPaymentType(),saveOrder.getStatus(),
+                    saveOrder.getCustomerId(),saveOrder.getOutletId(),orderItems1,saveOrder.getTrainName(), saveOrder.getTrainNo(), saveOrder.getStationCode(), saveOrder.getStationName(),
+                    saveOrder.getCoach(), saveOrder.getBerth(), saveOrder.getOrderFrom(),saveOrder.getPnr(),saveOrder.getCreatedAt(),saveOrder.getCreatedBy());
+
+            return new ResponseEntity<>(new ResponseDTO<>("success",null,orderResponseBody),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO<>("failure","Incorrect order Id",null),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> getAllOrder() {
+        List<Orders> ordersList = orderRepository.findAll();
+        List<OrderResponseBody> orderResponseBodies = new ArrayList<>();
+        for(Orders orders :ordersList){
+            OrderResponseBody orderBody = new OrderResponseBody();
+            orderBody.setId(orders.getId());
+            orderBody.setTrainName(orders.getTrainName());
+            orderBody.setTrainNo(orders.getTrainNo());
+            orderBody.setStationCode(orders.getStationCode());
+            orderBody.setStationName(orders.getStationName());
+            orderBody.setCoach(orders.getCoach());
+            orderBody.setBerth(orders.getBerth());
+            orderBody.getDeliveryDate(orders.getDeliveryDate());
+            orderBody.setBookingDate(orders.getBookingDate());
+            orderBody.setOutletId(orders.getOutletId());
+            orderBody.setCustomerId(orders.getCustomerId());
+            orderBody.setCreatedAt(orders.getCreatedAt());
+            orderBody.setStatus(orders.getStatus());
+            orderBody.setCreatedBy(orders.getCreatedBy());
+            orderBody.setPnr(orders.getPnr());
+            orderBody.setPaymentType(orders.getPaymentType());
+            orderBody.setDeliveryCharge(orders.getDeliveryCharge());
+            orderBody.setOrderFrom(orders.getOrderFrom());
+            orderBody.setTotalAmount(orders.getTotalAmount());
+            orderBody.setGst(orders.getGst());
+            orderBody.setPayable_amount(orders.getPayable_amount());
+            List<OrderItems> orderItemsList = orderItemsRepository.findByOrderId(String.valueOf(orders.getId()));
+            orderBody.setOrderItems(orderItemsList);
+            orderResponseBodies.add(orderBody);
+        }
+
+        return new ResponseEntity<>(new ResponseDTO<>("success",null,orderResponseBodies),
+                HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO> updateStatus(OrderStatusBody orderStatusBody, Long orderId) {
+        Optional<Orders> orders = orderRepository.findById(orderId);
+        if(orders.isPresent()){
+            Orders orders1 = orders.get();
+            orders1.setStatus(orderStatusBody.getStatus());
+            Orders orders2 = orderRepository.save(orders1);
+            List<OrderItems> orderItemsList = orderItemsRepository.findByOrderId(String.valueOf(orderId));
+            OrderResponseBody orderResponseBody = new OrderResponseBody(orders2.getId(),orders2.getTotalAmount(),orders2.getGst(),orders2.getDeliveryCharge(),
+                    orders2.getPayable_amount(),orders2.getDeliveryDate(),orders2.getBookingDate(),orders2.getPaymentType(),orders2.getStatus(),
+                    orders2.getCustomerId(),orders2.getOutletId(),orderItemsList,orders2.getTrainName(), orders2.getTrainNo(), orders2.getStationCode(), orders2.getStationName(),
+                    orders2.getCoach(), orders2.getBerth(), orders2.getOrderFrom(),orders2.getPnr(),orders2.getCreatedAt(),orders2.getCreatedBy());
+
+            return new ResponseEntity<>(new ResponseDTO<>("failure",null,orderResponseBody),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseDTO<>("failure","order is not found",null),
+                HttpStatus.BAD_REQUEST);
     }
 }
